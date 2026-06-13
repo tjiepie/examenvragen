@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAVO Biologie Examens - Domeinen Zoeken & Exporteren</title>
+    <style>
+        :root {
+            --color-A: #3498db; /* Voeding en vertering */
+            --color-B: #2ecc71; /* Stofwisseling van de cel */
+            --color-C: #e74c3c; /* Bloedsomloop */
+            --color-D: #9b59b6; /* Ademhaling */
+            --color-E: #f39c12; /* Uitscheiding */
+            --color-F: #1abc9c; /* Zenuwstelsel en hormonen */
+            --color-G: #e67e22; /* Waarnemen */
+            --color-H: #34495e; /* Beweging */
+            --color-I: #e91e63; /* Afweer */
+            --color-J: #00bcd4; /* Erfelijkheid */
+            --color-K: #673ab7; /* Evolutie */
+            --color-L: #4caf50; /* Ecologie */
+            --color-M: #ff5722; /* Gedrag */
+            --color-N: #795548; /* Plantenfysiologie */
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        header p {
+            text-align: center;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        /* Syllabus Legend */
+        .syllabus-legend {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .syllabus-legend h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--light);
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-bar h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9em;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+
+        .results-info {
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+
+        /* Questions List */
+        .questions-container {
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+            cursor: pointer;
+        }
+
+        .question-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .question-card.selected {
+            border-left-color: var(--success);
+            background: #f8fff8;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .domain-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .question-info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .question-preview {
+            color: var(--dark);
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        /* Export Panel */
+        .export-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .export-panel.active {
+            display: block;
+        }
+
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .export-count {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            overflow: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .modal-section h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 5px;
+        }
+
+        .modal-section p {
+            line-height: 1.7;
+            color: var(--dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .legend-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .question-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .filter-bar,
+            .export-panel,
+            .modal,
+            .btn {
+                display: none !important;
+            }
+            
+            .question-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border-left: none;
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+            
+            .question-card.selected {
+                background: #f0f0f0;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-card {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 HAVO Biologie Examens</h1>
+            <p>Doorzoeken & Exporteren per Syllabus Domein</p>
+        </header>
+
+        <!-- Syllabus Legend -->
+        <section class="syllabus-legend">
+            <h3>📚 HAVO Biologie Syllabus Domeinen</h3>
+            <div class="legend-grid">
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-A);"></div> A - Voeding en vertering</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-B);"></div> B - Stofwisseling van de cel</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-C);"></div> C - Bloedsomloop</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-D);"></div> D - Ademhaling</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-E);"></div> E - Uitscheiding</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-F);"></div> F - Zenuwstelsel en hormonen</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-G);"></div> G - Waarnemen</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-H);"></div> H - Beweging</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-I);"></div> I - Afweer</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-J);"></div> J - Erfelijkheid</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-K);"></div> K - Evolutie</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-L);"></div> L - Ecologie</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-M);"></div> M - Gedrag</div>
+                <div class="legend-item"><div class="legend-color" style="background: var(--color-N);"></div> N - Plantenfysiologie</div>
+            </div>
+        </section>
+
+        <!-- Filter Bar -->
+        <section class="filter-bar">
+            <h3>🔍 Filter Examenvragen</h3>
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="search-input">Zoekterm</label>
+                    <input type="text" id="search-input" placeholder="Bijv: mitose, DNA, enzym...">
+                </div>
+                <div class="filter-group">
+                    <label for="domain-filter">Domein</label>
+                    <select id="domain-filter">
+                        <option value="">Alle Domeinen</option>
+                        <option value="A">A - Voeding en vertering</option>
+                        <option value="B">B - Stofwisseling van de cel</option>
+                        <option value="C">C - Bloedsomloop</option>
+                        <option value="D">D - Ademhaling</option>
+                        <option value="E">E - Uitscheiding</option>
+                        <option value="F">F - Zenuwstelsel en hormonen</option>
+                        <option value="G">G - Waarnemen</option>
+                        <option value="H">H - Beweging</option>
+                        <option value="I">I - Afweer</option>
+                        <option value="J">J - Erfelijkheid</option>
+                        <option value="K">K - Evolutie</option>
+                        <option value="L">L - Ecologie</option>
+                        <option value="M">M - Gedrag</option>
+                        <option value="N">N - Plantenfysiologie</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="year-filter">Jaar</label>
+                    <select id="year-filter">
+                        <option value="">Alle Jaren</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="tijdvak-filter">Tijdvak</label>
+                    <select id="tijdvak-filter">
+                        <option value="">Alle Tijdvakken</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-secondary" id="select-all-btn">Selecteer Alles</button>
+                <button class="btn btn-secondary" id="deselect-all-btn">Deselecteer Alles</button>
+                <button class="btn btn-primary" id="export-btn">Exporteer Geselecteerde Vragen</button>
+            </div>
+            <div class="results-info" id="results-info">Toont 0 van 0 vragen</div>
+        </section>
+
+        <!-- Export Panel -->
+        <section class="export-panel" id="export-panel">
+            <div class="export-header">
+                <h3>📄 Exporteer Geselecteerde Vragen</h3>
+                <span class="export-count" id="export-count">0 vragen geselecteerd</span>
+            </div>
+            <button class="btn btn-primary" id="confirm-export-btn">Bevestig Export als HTML</button>
+        </section>
+
+        <!-- Questions List -->
+        <section class="questions-container" id="questions-container">
+            <!-- Questions will be inserted here by JavaScript -->
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="question-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Syllabus domeinnamen mapping
+        const DOMAIN_NAMES = {
+            'A': 'Voeding en vertering',
+            'B': 'Stofwisseling van de cel',
+            'C': 'Bloedsomloop',
+            'D': 'Ademhaling',
+            'E': 'Uitscheiding',
+            'F': 'Zenuwstelsel en hormonen',
+            'G': 'Waarnemen',
+            'H': 'Beweging',
+            'I': 'Afweer',
+            'J': 'Erfelijkheid',
+            'K': 'Evolutie',
+            'L': 'Ecologie',
+            'M': 'Gedrag',
+            'N': 'Plantenfysiologie'
+        };
+
+        // Domein kleuren mapping
+        const DOMAIN_COLORS = {
+            'A': 'var(--color-A)',
+            'B': 'var(--color-B)',
+            'C': 'var(--color-C)',
+            'D': 'var(--color-D)',
+            'E': 'var(--color-E)',
+            'F': 'var(--color-F)',
+            'G': 'var(--color-G)',
+            'H': 'var(--color-H)',
+            'I': 'var(--color-I)',
+            'J': 'var(--color-J)',
+            'K': 'var(--color-K)',
+            'L': 'var(--color-L)',
+            'M': 'var(--color-M)',
+            'N': 'var(--color-N)'
+        };
+
+        // Examenvragen database
+        const questions = [
+            {
+                id: "2023-1-3",
+                year: 2023,
+                tijdvak: 1,
+                domain: "J",
+                domainName: "Erfelijkheid",
+                subDomain: "J2",
+                topic: "Mitose",
+                question: "Leg uit hoe mitose zorgt voor groei van een organisme. Beschrijf de fasen van de celdeling en geef aan waarom dit proces belangrijk is voor meercellige organismen.",
+                context: "In afbeelding 1 is een microscoopfoto te zien van cellen in verschillende stadia van de celdeling. De cellen zijn afkomstig uit de wortelpunt van een ui.",
+                points: 4,
+                tags: ["mitose", "celdeling", "groei", "chromosomen"]
+            },
+            {
+                id: "2023-1-5",
+                year: 2023,
+                tijdvak: 1,
+                domain: "J",
+                domainName: "Erfelijkheid",
+                subDomain: "J3",
+                topic: "DNA-replicatie",
+                question: "Beschrijf het proces van DNA-replicatie. Geef in je antwoord aan welke enzymen hierbij betrokken zijn en leg uit waarom dit proces semi-conservatief is.",
+                context: "In een experiment is gebleken dat na één replicatiecyclus elk DNA-molecuul uit één oude en één nieuwe streng bestaat.",
+                points: 3,
+                tags: ["DNA", "replicatie", "semi-conservatief", "enzymen"]
+            },
+            {
+                id: "2023-2-2",
+                year: 2023,
+                tijdvak: 2,
+                domain: "B",
+                domainName: "Stofwisseling van de cel",
+                subDomain: "B1",
+                topic: "Fotosynthese",
+                question: "Leg uit hoe planten door middel van fotosynthese organische stoffen produceren. Noem de vergelijking van fotosynthese en beschrijf de rol van chlorofyl.",
+                context: "In afbeelding 2 is een grafiek te zien die het verband toont tussen de lichtintensiteit en de zuurstofproductie in een plant.",
+                points: 5,
+                tags: ["fotosynthese", "chlorofyl", "glucose", "zuurstof"]
+            },
+            {
+                id: "2024-1-4",
+                year: 2024,
+                tijdvak: 1,
+                domain: "C",
+                domainName: "Bloedsomloop",
+                subDomain: "C2",
+                topic: "Hart en bloedvaten",
+                question: "Beschrijf de weg die een rode bloedcel aflegt vanaf het rechteratrium tot aan de grote teenspier. Noem alle hartdelen en bloedvaten die de bloedcel passeert.",
+                context: "In afbeelding 3 is een schematische tekening van het menselijk hart te zien met de grote bloedvaten.",
+                points: 4,
+                tags: ["hart", "bloedvaten", "bloedsomloop", "rode bloedcellen"]
+            },
+            {
+                id: "2024-2-1",
+                year: 2024,
+                tijdvak: 2,
+                domain: "I",
+                domainName: "Afweer",
+                subDomain: "I1",
+                topic: "Immuunsysteem",
+                question: "Leg uit hoe het lichaam reageert op een infectie met een onbekend virus. Beschrijf de rol van macrofagen, T-cellen en B-cellen in dit proces.",
+                context: "In een experiment zijn muizen blootgesteld aan een nieuw virus. Na 7 dagen bleken de muizen antistoffen tegen het virus te hebben ontwikkeld.",
+                points: 5,
+                tags: ["afweer", "immuunsysteem", "virus", "antistoffen", "macrofagen"]
+            },
+            {
+                id: "2025-1-2",
+                year: 2025,
+                tijdvak: 1,
+                domain: "A",
+                domainName: "Voeding en vertering",
+                subDomain: "A3",
+                topic: "Enzymen",
+                question: "Leg uit hoe enzymen de vertering van voedingsstoffen in de dunne darm bevorderen. Noem specifieke enzymen en de stoffen die zij afbreken.",
+                context: "In afbeelding 4 is een schematische tekening te zien van de dunne darm met de verschillende verteringssappen die daarin terechtkomen.",
+                points: 4,
+                tags: ["vertering", "enzymen", "dunne darm", "amylase", "lipase", "pepsine"]
+            },
+            {
+                id: "2025-2-3",
+                year: 2025,
+                tijdvak: 2,
+                domain: "K",
+                domainName: "Evolutie",
+                subDomain: "K2",
+                topic: "Natuurlijke selectie",
+                question: "Beschrijf hoe natuurlijke selectie kan leiden tot de evolutie van antibiotica-resistente bacteriën. Geef in je antwoord aan welke factoren hierbij een rol spelen.",
+                context: "In een ziekenhuis is geconstateerd dat steeds meer bacteriën resistent zijn tegen een bepaald antibioticum. In afbeelding 5 is een grafiek te zien die dit aantoont.",
+                points: 4,
+                tags: ["evolutie", "natuurlijke selectie", "antibiotica", "resistentie", "bacteriën"]
+            }
+        ];
+
+        // State
+        let selectedQuestions = new Set();
+
+        // DOM Elements
+        const questionsContainer = document.getElementById('questions-container');
+        const searchInput = document.getElementById('search-input');
+        const domainFilter = document.getElementById('domain-filter');
+        const yearFilter = document.getElementById('year-filter');
+        const tijdvakFilter = document.getElementById('tijdvak-filter');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const deselectAllBtn = document.getElementById('deselect-all-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const exportPanel = document.getElementById('export-panel');
+        const exportCount = document.getElementById('export-count');
+        const confirmExportBtn = document.getElementById('confirm-export-btn');
+        const resultsInfo = document.getElementById('results-info');
+        const modal = document.getElementById('question-modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        // Initialize
+        function init() {
+            renderQuestions(questions);
+            setupEventListeners();
+            updateResultsInfo(questions.length);
+        }
+
+        // Render questions
+        function renderQuestions(questionsToRender) {
+            questionsContainer.innerHTML = '';
+            
+            if (questionsToRender.length === 0) {
+                questionsContainer.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 40px;">Geen vragen gevonden die voldoen aan de criteria.</p>';
+                return;
+            }
+
+            questionsToRender.forEach(question => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                if (selectedQuestions.has(question.id)) {
+                    card.classList.add('selected');
+                }
+                
+                const domainColor = DOMAIN_COLORS[question.domain] || 'var(--primary)';
+                const preview = question.question.length > 100 
+                    ? question.question.substring(0, 100) + '...' 
+                    : question.question;
+
+                card.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-meta">
+                            <span class="domain-badge" style="background: ${domainColor};">${question.domain} - ${question.domainName}</span>
+                            <div class="question-info">
+                                <span>📅 ${question.year} - Tijdvak ${question.tijdvak}</span>
+                                <span>⭐ ${question.points} punten</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="q-${question.id}" ${selectedQuestions.has(question.id) ? 'checked' : ''}>
+                            <label for="q-${question.id}"></label>
+                        </div>
+                    </div>
+                    <div class="question-preview">${preview}</div>
+                `;
+
+                card.addEventListener('click', (e) => {
+                    if (e.target.type !== 'checkbox') {
+                        showQuestionDetail(question);
+                    }
+                });
+
+                card.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedQuestions.add(question.id);
+                    } else {
+                        selectedQuestions.delete(question.id);
+                    }
+                    updateExportCount();
+                });
+
+                questionsContainer.appendChild(card);
+            });
+        }
+
+        // Filter questions
+        function filterQuestions() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const domain = domainFilter.value;
+            const year = yearFilter.value;
+            const tijdvak = tijdvakFilter.value;
+
+            const filtered = questions.filter(question => {
+                const matchesSearch = !searchTerm || 
+                    question.question.toLowerCase().includes(searchTerm) ||
+                    question.context.toLowerCase().includes(searchTerm) ||
+                    question.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                    question.topic.toLowerCase().includes(searchTerm);
+                
+                const matchesDomain = !domain || question.domain === domain;
+                const matchesYear = !year || question.year === parseInt(year);
+                const matchesTijdvak = !tijdvak || question.tijdvak === parseInt(tijdvak);
+
+                return matchesSearch && matchesDomain && matchesYear && matchesTijdvak;
+            });
+
+            renderQuestions(filtered);
+            updateResultsInfo(filtered.length);
+        }
+
+        // Update results info
+        function updateResultsInfo(total) {
+            const filteredCount = document.querySelectorAll('.question-card').length;
+            resultsInfo.textContent = `Toont ${filteredCount} van ${total} vragen`;
+        }
+
+        // Update export count
+        function updateExportCount() {
+            exportCount.textContent = `${selectedQuestions.size} vragen geselecteerd`;
+        }
+
+        // Show question detail in modal
+        function showQuestionDetail(question) {
+            const domainColor = DOMAIN_COLORS[question.domain] || 'var(--primary)';
+            
+            modalBody.innerHTML = `
+                <div class="modal-section">
+                    <h2 style="color: ${domainColor};">${question.domain} - ${question.domainName}</h2>
+                    <p><strong>Opgave:</strong> ${question.id} | <strong>Jaar:</strong> ${question.year} - Tijdvak ${question.tijdvak} | <strong>Punten:</strong> ${question.points}</p>
+                </div>
+                <div class="modal-section">
+                    <h4>📖 Context</h4>
+                    <p>${question.context}</p>
+                </div>
+                <div class="modal-section">
+                    <h4>❓ Vraag</h4>
+                    <p>${question.question}</p>
+                </div>
+                <div class="modal-section">
+                    <h4>🏷️ Tags</h4>
+                    <p>${question.tags.join(', ')}</p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // Export to HTML
+        function exportToHTML() {
+            const selected = questions.filter(q => selectedQuestions.has(q.id));
+            
+            if (selected.length === 0) {
+                alert('Selecteer ten minste één vraag om te exporteren.');
+                return;
+            }
+
+            // Create export HTML
+            let exportHTML = `
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geëxporteerde HAVO Biologie Vragen</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2c3e50;
+        }
+        h1 { font-size: 1.8em; color: #2c3e50; }
+        h2 { color: #3498db; margin-top: 30px; }
+        .question {
+            margin-bottom: 40px;
+            page-break-after: always;
+        }
+        .question-meta {
+            background: #f5f7fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .question-content {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        .answer-space {
+            min-height: 150px;
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+            background: #f9f9f9;
+        }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧬 HAVO Biologie Examenvragen</h1>
+        <p>Geëxporteerd op: ${new Date().toLocaleDateString('nl-NL')}</p>
+        <p>Totaal: ${selected.length} vragen</p>
+    </header>
+`;
+
+            selected.forEach((question, index) => {
+                const domainColor = DOMAIN_COLORS[question.domain] || '#3498db';
+                exportHTML += `
+    <div class="question">
+        <div class="question-meta">
+            <strong>Vraag ${index + 1}</strong> | 
+            Domein: <strong style="color: ${domainColor};">${question.domain} - ${question.domainName}</strong> | 
+            Bron: ${question.year} - Tijdvak ${question.tijdvak} | 
+            Punten: ${question.points}
+        </div>
+        <div class="question-content">
+            <h3>${question.topic}</h3>
+            <p><strong>Context:</strong> ${question.context}</p>
+            <p><strong>Vraag:</strong> ${question.question}</p>
+            <div class="answer-space">
+                <p style="color: #999; font-style: italic;">Ruimte voor antwoord...</p>
+            </div>
+        </div>
+    </div>
+`;
+            });
+
+            exportHTML += `
+    <p style="text-align: center; margin-top: 40px; color: #999; class="no-print">
+        Einde van document
+    </p>
+</body>
+</html>
+`;
+
+            // Open in new window
+            const exportWindow = window.open('', '_blank');
+            exportWindow.document.write(exportHTML);
+            exportWindow.document.close();
+            exportWindow.focus();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            searchInput.addEventListener('input', filterQuestions);
+            domainFilter.addEventListener('change', filterQuestions);
+            yearFilter.addEventListener('change', filterQuestions);
+            tijdvakFilter.addEventListener('change', filterQuestions);
+            
+            selectAllBtn.addEventListener('click', () => {
+                questions.forEach(q => selectedQuestions.add(q.id));
+                renderQuestions(questions.filter(q => 
+                    (!searchInput.value || q.question.toLowerCase().includes(searchInput.value.toLowerCase())) &&
+                    (!domainFilter.value || q.domain === domainFilter.value) &&
+                    (!yearFilter.value || q.year === parseInt(yearFilter.value)) &&
+                    (!tijdvakFilter.value || q.tijdvak === parseInt(tijdvakFilter.value))
+                ));
+                updateExportCount();
+            });
+            
+            deselectAllBtn.addEventListener('click', () => {
+                selectedQuestions.clear();
+                renderQuestions(questions.filter(q => 
+                    (!searchInput.value || q.question.toLowerCase().includes(searchInput.value.toLowerCase())) &&
+                    (!domainFilter.value || q.domain === domainFilter.value) &&
+                    (!yearFilter.value || q.year === parseInt(yearFilter.value)) &&
+                    (!tijdvakFilter.value || q.tijdvak === parseInt(tijdvakFilter.value))
+                ));
+                updateExportCount();
+            });
+            
+            exportBtn.addEventListener('click', () => {
+                exportPanel.classList.add('active');
+            });
+            
+            confirmExportBtn.addEventListener('click', () => {
+                exportToHTML();
+                exportPanel.classList.remove('active');
+            });
+            
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
