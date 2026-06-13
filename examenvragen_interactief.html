@@ -1,0 +1,2881 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examenvragen HAVO Biologie - Domeinen Overzicht</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-card h3 {
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-card .percentage {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .search-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .results-count {
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+        
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .domain-link {
+            display: block;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .domain-link:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .domain-link h4 {
+            margin-bottom: 5px;
+        }
+        
+        .domain-link .count {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .question-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #bdc3c7;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .question-item:hover {
+            background: #f0f4f8;
+            border-left-color: #3498db;
+            transform: translateX(5px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .question-domain {
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .question-pdf {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .question-text {
+            color: #34495e;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+            
+            .domain-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .back-to-top {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-top:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Examenvragen HAVO Biologie</h1>
+            <p>Domeinen Overzicht - 2025 Examens</p>
+        </header>
+        
+        <section class="stats-overview">
+            <div class="stat-card">
+                <h3>Totaal Vragen</h3>
+                <div class="number">479</div>
+                <div class="percentage">100%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Domeinen</h3>
+                <div class="number">13</div>
+                <div class="percentage">actief</div>
+            </div>
+            <div class="stat-card">
+                <h3>Examens</h3>
+                <div class="number">3</div>
+                <div class="percentage">2025 I & II</div>
+            </div>
+            <div class="stat-card">
+                <h3>Gecategoriseerd</h3>
+                <div class="number">479</div>
+                <div class="percentage">100.0%</div>
+            </div>
+        </section>
+        
+        <section class="search-section">
+            <h2>🔍 Zoek en Filter Vragen</h2>
+            <div class="search-controls">
+                <input type="text" id="search-input" class="search-input" placeholder="Zoek in vragen...">
+                <select id="domain-filter" class="filter-select">
+                    <option value="">Alle Domeinen</option>
+                    <option value="Onbekend">Onbekend (175 - 36.5%)</option>
+                    <option value="Waarnemen">Waarnemen (112 - 23.4%)</option>
+                    <option value="Erfelijkheid">Erfelijkheid (44 - 9.2%)</option>
+                    <option value="Bloedsomloop">Bloedsomloop (36 - 7.5%)</option>
+                    <option value="Voeding en vertering">Voeding en vertering (24 - 5.0%)</option>
+                    <option value="Uitscheiding">Uitscheiding (19 - 4.0%)</option>
+                    <option value="Afweer">Afweer (18 - 3.8%)</option>
+                    <option value="Stofwisseling van de cel">Stofwisseling van de cel (18 - 3.8%)</option>
+                    <option value="Zenuwstelsel en hormonen">Zenuwstelsel en hormonen (14 - 2.9%)</option>
+                    <option value="Plantenfysiologie">Plantenfysiologie (8 - 1.7%)</option>
+                    <option value="Ademhaling">Ademhaling (6 - 1.3%)</option>
+                    <option value="Ecologie">Ecologie (3 - 0.6%)</option>
+                    <option value="Beweging">Beweging (2 - 0.4%)</option>
+                </select>
+                <select id="pdf-filter" class="filter-select">
+                    <option value="">Alle Examens</option>
+                    <option value="2025I.pdf">2025 Tijdvak 1</option>
+                    <option value="2025I bijlage.pdf">2025 Tijdvak 1 Bijlage</option>
+                    <option value="2025II.pdf">2025 Tijdvak 2</option>
+                </select>
+            </div>
+            <div class="results-count" id="results-count"></div>
+        </section>
+        
+        <section id="domain-overview">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">📊 Domeinen Overzicht</h2>
+            <div class="domain-grid" id="domain-grid">
+                <a href="#Onbekend" class="domain-link">
+                    <h4>Onbekend</h4>
+                    <div class="count">175 vragen (36.5%)</div>
+                </a>
+                <a href="#Waarnemen" class="domain-link">
+                    <h4>Waarnemen</h4>
+                    <div class="count">112 vragen (23.4%)</div>
+                </a>
+                <a href="#Erfelijkheid" class="domain-link">
+                    <h4>Erfelijkheid</h4>
+                    <div class="count">44 vragen (9.2%)</div>
+                </a>
+                <a href="#Bloedsomloop" class="domain-link">
+                    <h4>Bloedsomloop</h4>
+                    <div class="count">36 vragen (7.5%)</div>
+                </a>
+                <a href="#Voeding en vertering" class="domain-link">
+                    <h4>Voeding en vertering</h4>
+                    <div class="count">24 vragen (5.0%)</div>
+                </a>
+                <a href="#Uitscheiding" class="domain-link">
+                    <h4>Uitscheiding</h4>
+                    <div class="count">19 vragen (4.0%)</div>
+                </a>
+                <a href="#Afweer" class="domain-link">
+                    <h4>Afweer</h4>
+                    <div class="count">18 vragen (3.8%)</div>
+                </a>
+                <a href="#Stofwisseling van de cel" class="domain-link">
+                    <h4>Stofwisseling van de cel</h4>
+                    <div class="count">18 vragen (3.8%)</div>
+                </a>
+                <a href="#Zenuwstelsel en hormonen" class="domain-link">
+                    <h4>Zenuwstelsel en hormonen</h4>
+                    <div class="count">14 vragen (2.9%)</div>
+                </a>
+                <a href="#Plantenfysiologie" class="domain-link">
+                    <h4>Plantenfysiologie</h4>
+                    <div class="count">8 vragen (1.7%)</div>
+                </a>
+                <a href="#Ademhaling" class="domain-link">
+                    <h4>Ademhaling</h4>
+                    <div class="count">6 vragen (1.3%)</div>
+                </a>
+                <a href="#Ecologie" class="domain-link">
+                    <h4>Ecologie</h4>
+                    <div class="count">3 vragen (0.6%)</div>
+                </a>
+                <a href="#Beweging" class="domain-link">
+                    <h4>Beweging</h4>
+                    <div class="count">2 vragen (0.4%)</div>
+                </a>
+            </div>
+        </section>
+        
+        <section id="questions-container">
+            <!-- Questions will be inserted here by JavaScript -->
+        </section>
+        
+        <a href="#" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">🔝 Terug naar boven</a>
+    </div>
+    
+    <script>
+        // Questions data
+        const questionsData = [
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "lees verder Uit het onderzoek blijkt dat de milt bij de Baja u mannen gemid"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "deld groter is dan bij de Saluan mannen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Uit dit onderzoek is niet af te leiden of een grotere milt erfelijk is, of dat"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Om dat te bepalen, moet in een vervolgonderzoek de miltgrootte van twee andere groepen met elkaar vergeleken worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Noteer twee groepen waarvan de milt grootte met elkaar moet worden vergeleken om hier duideli jkheid over te krijgen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Beschrijf h t resultaat van het ve"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "erzoek waaruit blijkt dat een grotere milt erfelijk is"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "De grootte van de milt wordt alleen bepaald door het gen op chromosoom"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Schrijf de nummers , en onder elkaar"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende uitspraak of"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "een juiste conclusie is op basis van de gegevens in het informatiekader"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "t gevolg is v"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Beschrijf hoe evolutie tot een grotere milt k an hebben geleid"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "lees verder Insecticiden worden in de landbouw gebruikt om insecten te doden die voedselgewassen aantasten"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Bepaal de insecticiden \\ zoals het verboden middel DDT\\ zijn een grote bedreiging voor de gezondheid van toppredatoren zoals de zeeare"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "gevoelig zijn voor het gif als zeearenden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Leg uit dat de zeearend ernstige gezondheidssc"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "lees verder De Bajau De Bajau \\ afbeelding \\ is een volk van zeenomaden in Indonesi"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Ze zijn in staat om lang onder water te blijv"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "afbeelding Veel Bajau mannen vissen met behulp van een harpoen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Ze duiken hierbij zonder duikuitrusting tot wel meter diep en kunnen tien minuten ond"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "er water blijv"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Ademhaling",
+        "question": "Om lang zijn adem in te kunnen houden, kan een duiker vooraf een aantal keer diep in en uitademen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Dit vergr oot de hoeveelheid zuurs"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "De duiker kan hierdoor echter buiten bewus tzijn raken voordat de ademprikkel ontstaat, en kan zo verdrinken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Ademhaling",
+        "question": "Door het inhouden van de adem wordt het restvolume van de longen groter"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "De duiker raakt buiten bewustzijn, doordat de O concentratie in zijn bloed te laag wordt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende uitspraak Uit onderzoek bij zee"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "honden is bekend dat er een relatie is tussen de grootte van de milt en de maximale duikt ijd"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "stoftekort kan de milt samentrekken om extra rode bl"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "Wetenschappers denken dat het sam entrekken van de milt aan het begin van een duik, wordt veroorzaakt door signalen van het deel van het zenuwstelsel dat het lichaam gereedmaakt voor actie"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "Welk deel van het zenuwstelsel is dat"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "elsel het parasympathisch zenuwstelsel het orthosympathisch zenuwstelsel lees verder Als er jonge zeearenden uit het ei zijn gek"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Zo kunnen onderzoekers inzicht krijgen in paarvorming en migratie van deze vogels"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "bijvoorbeeld ook paartjes te vormen met Duitse zeearenden, en ook met niet geringde zeearenden waarvan de herkomst onbekend is"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Voor het voortbestaan van een popul atie zeearenden is paarvorming met zeearenden uit andere gebied"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Leg uit waarom het belangrijk is"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "dat er paarvorming is met individuen u"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "De broedpogingen van de z eearend zijn niet altijd s"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "In andere gevallen zijn abiotische factoren verantwoordelijk v oor een lager broedsucc"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Licht met een voorbeeld toe hoe een abiotische factor een lager"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Bij het ringen wordt het geslacht van de jonge zeear"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "end bepaald"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ganen zijn niet uiterlijk zic"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Er zijn wel and"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Er zijn twee methodes die eenvoudig in"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "veld gebruikt kunnen worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Beweging",
+        "question": "Methode : onderzoekers meten de breedte en dikte van een bepaald bot in de poot"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Deze twee gegevens worden met elkaar vermenigvuldigd"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Methode : onderzoekers bepalen het gewicht en de vleugelle"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Bij het testen van deze methodes moest ter controle ook het geslacht van elke gemeten zeearend met zekerhei d worden vastgesteld"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Uitscheiding",
+        "question": "Noteer welk onderzoek werd gedaan aan het huidmonster om het geslacht van de zeearend te bepalen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "lees verder De antischimmelmedicijnen die Ja sper kreeg, waren azolen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "enzym is nodig voor"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Ergosterol is een bestanddeel van de celmembraan van schimmels"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Noteer de volgende woorden op de juiste plaats in het schema: azolen, ergosterol, lanosteroldemethylase"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Noteer in de cirkels een voor een stimuler ende werking of voor een remmende werking"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "De schimmel in de longen en hersenen v an Jasper bleek resistent tegen azolen door een puntmutatie in het gen voor het enzym lanosteroldemethylase"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Het codon voor het aminozuur leucine is gewijz"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "gd in een codon voor het aminozuur hist idine"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "Daardoor heeft het enzym een iets andere vorm, met als gevolg dat azolen dit enzym niet meer kunnen remmen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "Ondanks de andere vorm is het enzym nog wel werkzaam"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "e is gewijz"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "gd, waardoor het codon voor leucine in een codon voor histidine is veranderd"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "de eerste base de tweede base de derde base Resistentie van een schimmel t egen een medicijn kan ontstaan na herhaald gebruik van dit medicijn"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "pati nten komt de resistente Aspergillus fumigatus met dezelfde puntmutatie voor"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "De overdracht van sporen tussen mensen is niet mogelijk"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Artsen vermoeden daarom dat de pati nten de ziekte oplopen door het inademen van resistente schimmelsporen uit het milieu"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Verklaar dat het erg onwaarsch"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Waarschijnlijk is in zo n composthoop de resistente Aspergillus fumigatus ontstaan"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Tot welke groep behoort in de kringlo"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "En welke omz"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "tting in de kringloo p van stoffen wordt gedaan door groep"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "he stoffen organische stoffen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "en organische stoffen anorganische stoffen reducenten"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "he stoffen organische stoffen reducenten organische stoffen anorganische stoffen scheidt amylase uit"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "Amylase is een enzym dat bepaalde moleculen uit het plantaardig afval afbreekt tot voedingsstoffen die door de schimmel kunnen worden opgenomen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "Noteer een molecuul dat aanwez ig is in plantaardig afval door amylase wordt afgebroken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Jasper kreeg andere medicijnen t oegediend die wel goed werkten tegen de schimmel, waardoor hij herstel de"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "n heeft Jasper onder andere een grotere kans op een kaliumtekort"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Uitscheiding",
+        "question": "Welk gedeelte van een niereenheid zal zijn aangeta"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "t waardoor een kaliumtekort kan optreden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Elk bolletje in deze diagrammen is een bepaling bij n zeearend"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "rammen blijkt welke met hode het meest geschikt is voor geslachtsbepaling"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Is methode of is methode het m eest geschikt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Verklaar je antwoord"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Ecologie",
+        "question": "De populatie is gegroeid tot ruim dieren"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "en, zodat ze van de jonge takken kunnen eten"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Zeearenden gebruiken zwarte populieren om hun nest in te maken, omdat deze boomsoort e takken heeft"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "nden zijn namelijk be"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Van der Es vi ndt dat in dit geval de keuze voor de zeearend het best is"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer een biolo"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "argument dat zijn standpunt ondersteunt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "De relatie tussen de zwarte populier en de zeearend kan commensalism"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "genoemd worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Geef een argument v oor deze stellin"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "ami smaakstoffen in deze voedingsmiddelen elkaar versterken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Umami \\ hartig\\ is de vijfde smaak die mensen kunnen onders"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Elk van de vijf smaken in voedsel ver oorzaakt een reactie in specifieke smaakzintuigcellen op de tong"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Reacties in de smaakzintuigce"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "leiden ertoe dat de smaak uiteinde"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "lijk wordt waargenomen in de hersenen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "In welk deel van de hersenen wordt de smaak waargenomen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "in de hersenstam in de kleine hersenen in de motorische schors in de sens"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "orische schors Afbeelding laat zien hoe binding van umami smaakstof aan een receptor op een smaakzintuigcel op de tong leidt tot een signaal in een zenuwcel"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "plaatsen ontbreekt een afbeelding Umami smaakstoffen binden aan rec eptoren op de smaakzintuigcel"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Na een keten van reacties worden bl aasjes met"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "in de synaps tussen de smaakzintuigcel en de zenuwcel terecht"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Schrijf de nummers , en onder el kaar"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Noteer erachter welk woord op de bijbehorende plaats moet staan"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Ze bleek Fanconi anemie te hebben"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Fanconi anemie \\ FA\\ is een zeldzame erfelijke ziekt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "waarbij er onder andere een verminderde aanmaak is van de vaste bloedbestanddelen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "FA wordt meestal veroorzaakt door een mutatie die aanwez"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "ig is in een autosomaal gen, het FANCA gen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Het mu tante allel is recessief"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Normaal gesproken regelt het FANCA gen dat DNA ger epareerd kan worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Fanconi anemie kan ook ontstaan door een mutatie die aanwe"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "ig is in een gen op het X chromosoom"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "l is recessief"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Bij Eileen is FA het gevolg van aut osomale overerving"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "afbeelding Waaruit blijkt dat FA in de familie van Eile"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Eileens moeder heeft geen FA"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Eileens vader heeft geen FA"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Eileens broer heeft geen FA"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Eileens opa aan moeder s kant heeft geen FA"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "doening heeft Eilee"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Daardoor is ze altijd moe en heeft ze vaak last van infecties en bloedingen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Afbeelding is een microscopisch preparaat van gezond bloed"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Hierin zijn verschillende vaste bloedbestanddelen met nummers aangegev"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "afbeelding lees verder De milt kan rode bloedcellen opsl aan en speelt een rol bij de afbraak ervan"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "In welk ander orgaan worden rode bloedc"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "n wordt ook het eiwit afgebroken dat zuurstof transporteert"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "Noteer de naam van dit eiwit"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "capaciteit van de Bajau ook een relatie heeft met de grootte van hun milt en of deze aanpassing een genetische basis heeft"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "oekers isoleerden het DNA ui t cellen van het wangslijmvlies"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Met behulp van echografie bepaald en ze de grootte van de milt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Cellen van de milt zijn moeilijk af te nemen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ers isoleer"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Licht toe dat cellen van het wangs kunnen worden voor het DNA onderzoek naar genen die de gr ootte van de milt be nvloeden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "De milt is onderdeel van het lymfev atenstelsel"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Met echografie werd de grootte van de milt bepaald"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "De tr ansductor \\ afbeelding \\ van het echoapparaat wordt op de plaats op de romp gezet waar zich de milt bevindt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "Op een beeldscherm kan de milt dan zichtbaar worden gemaakt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "afbeelding afbeelding Op welke plaats op de romp \\ ng \\ moet de transductor geplaat"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "st worden om een beeld van de milt te kunnen krijge"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Noteer in de tweede kolom in elk vakje het nummer waarmee het bijbehorende bloedbestanddeel in afbeelding is aangegev"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer in de derde kolom in elk"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "de rode bloedcellen zijn bij voorkeur van Eileens eigen bloedgroep"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Eileen heeft bloedgroep B en is resuspositief \\ \\"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "ou ze ook rode bloedcellen van andere bloedgroepen kunnen ontvangen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Het ziekenhuis heeft de volgende ander e rode bloedcelle"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "n op voorraad: Noteer welke van deze rode bloedcel len v"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "kunnen worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "lagader lees verder Jasper kreeg antischimmel medicijnen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "rte tijd daarna steeds dingen uit zijn"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "bladgroenkorrels celkern Welke van deze onderdelen zijn aanwez"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer de nummers"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "In afbeelding zijn tekeningen v an de hersenscans van Jaspers grote hersenen te zien"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Het zijn verschillende do"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "ijde van elke tekening is de voorkant van z ijn hoofd"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "tsen aan waar zenuwcellen vernietigd zijn door de schimmel"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "afbeelding Op een van de tekeningen in afbeelding is te zien dat de schimmel het gebied heeft ge nfecteerd dat Jaspers rechterhand aanstuurt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Op welke tekening is dat"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "op tekening op tekening op tekening lees verder Onderzoeker Charlotte Schm idt veronderstelde dat bepaalde"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "mbinaties lekker worden gevonden doordat umami smaakstoffen uit beide producten elkaar versterken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Uit eerder onderzoek"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "bleek dat bij ei eren de umami smaak vooral wordt veroorzaakt door het aminozuur glutaminezuur"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Bij spek wordt de umami smaak ver oorzaakt door bepaalde nucleotiden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Schmidt ontdekte dat wanneer dez e nucleotiden aanwezig zijn,"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "uur sterker wordt gebonden aan de receptor"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "Dit leidt tot een sterker signaal naar de hersenen, zodat de umami smaak sterker wordt waargenomen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Schmidt leidde hieruit af dat tw ee umami smaakstof fen waarvan de n een nucleotide is en de ander een am inozuur, elkaar inderdaad kunnen versterken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "In welke regels in de tekst word t de hypothese van het onderzoek van Schmidt beschreven"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Uitscheiding",
+        "question": "oor hun pr ofielwerkstuk onderzoeken of de smaakstoffen van ham en van kaas el kaar op dezelfde manier versterken als spek en eieren"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Ze maken drie puddingen waaraan ze verschillende smaakstoffen toevoegen: Pudding : ham smaakstof, in een concentratie net onder de drempelwaarde"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Pudding : kaas smaakstof, in een concentratie net onder de drempelwaarde"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Pudding : beide smaakstoffen, met dez elfde concentratie ham smaakstof als in pudding en dezelfde concent ratie kaas smaakstof als in pudding"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "leerlingen doen mee aan het onderzoek"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Kees noteert of de proefpersonen wel of niet ham en/of kaas waarnemen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Na elke hap spoelen de proefpersonen hun mond met water"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Kruis in de tabel aan met welke resultaten bevestigd zou worden dat beide smaakstoffen elkaar versterken"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Uitscheiding",
+        "question": "Om te controleren of de proefpersonen wel in staat zijn om ham en kaassmaak waar te nemen, lat en Han en Kees hun proefpersonen op dezelfde manier extr a puddingen proeven"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer wat de samenstellin"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "g is van deze extra puddingen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "s teksten en afbeeldingen, is te vinden in het bij dit examen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "e correctievoorschrift"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "Wat is de naam van het proces w aarbij uit de stamcellen verschillende typen bloedcellen ontstaan"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "En van welk proces is dit het gevolg"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "typen bloedcellen dat is het ontstaan door gevolg van adaptatie sie adaptatie recombinatie differentiatie"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "ie Een gevaar bij stamceltransplantati e is de omgekeerde afstotingsziekte"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Om dit tegen te gaan is een donor gez"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ocht van wie de membraaneiwi tten op de lichaamscellen zo veel mogelijk overeenkomen met die van Eileen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Welke afweercellen zijn ver antwoordelijk voor de omgekeerde afstotingsziekte"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "atie is gesl aagd als de gedonee"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "rde stamcellen zich vestigen op de plaats waar ook b ij gezonde mensen bloedc"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "Waar zullen de getransplanteer"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Bloedsomloop",
+        "question": "de st amcellen zich dan bij Eileen hebben in haar botten in haar hart in haar lev"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "ersity & Research onderzoekt de mogelijkheid om eendenkroosplantjes te gebruiken als eiwitrijke groente"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Eendenkroos is een verzamelnaam v oor verschillende soorten drijvende waterplantjes van enkele millimeters groot, zoals Lemna minor \\ afbeelding \\"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "De plantjes bestaan uit een bladachtig schijfje dat op het water drijft"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "oossoorten zijn wortels aanwezig \\ afbeelding \\"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ondjes is de opname en afgifte van gasse"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Welk gas wordt netto opgenomen in het licht"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "En welk gas wordt netto opgenomen in het donker"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Eendenkroos kan zich zowel geslachtel ijk als onges"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "In het voorjaar worden soms bloem etjes gevormd, maar meestal plant eendenkroos zich voort door ni euwe bladschijfjes af"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "De nakomelingen zijn genetis"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Recombinatie van de chromosomen is mogelijk"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of het bijbehorende kenmerk bij geslachtelijke of"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Voor dit examen zijn maximaal punten te behalen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Voor elk vraagnummer staat hoeveel punt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "aald kunnen worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Als bij een open vraag een verklaring, uitleg of berekening gev"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "raagd wordt, worden aan het antwoord meestal geen punten toegek end als deze verklaring, uitleg of berekening ontbreekt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Geef niet meer antwoor den \\ redenen, voorbeelden e"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "\\ dan er worden gevraagd"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "ee redenen wor den gevraagd en je geeft meer dan twee redenen, dan worden alleen de eerste twee in de beoordelin eteld"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "lees verder Eendenkroos groeit op ondiep, stilst aand of langzaam stromend water in sloten en vijvers"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "In de periode v an mei tot oktober groeit de populatie Als het wateroppervlak geheel met eendenkroos bedekt is, kan een tekort aan zuurstof ontstaan voor dieren die in het water leven"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "es spelen een aantal gebeurtenissen een rol: Aerobe bacteri n breken het organisch materiaal af"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Er dringt geen licht meer door in het water"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Er is geen fotosynthese mogelijk bij waterplanten die onder water groeien"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Noteer de nummers van de vier gebeurtenissen waardoor een tekort aan zuurstof ontstaat in de juiste volgorde"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Voor haar onderzoek"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "afbeelding Het water in de bakken bevat onder andere anorganische stikstofverbindingen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "De stikstof \\ N\\ is nodig voor de vorming van aminozuren en andere organisc"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Enkele organische stoffen zijn: chlorofyl DNA"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Schrijf de nummers tot en met onder elkaar"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende stof stikstof bevat"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Onder gunstige omstandigheden kan de biomassa van eendenkroos in n dag verdubbelen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Het is belangrij k om de hoeveelheid mineralen in het water goed te doseren, zodat ze geen beperkende factor worden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Ook de concentraties van O worden gemonitord"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Noem nog een ander"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Plantenfysiologie",
+        "question": "e beperke nd kan zijn tijdens de snelle groei van eendenkroos"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "lees verder Gevaarlijke sporen Jasper heeft een levensgevaar"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Afweer",
+        "question": "e infectie gehad met een schimmel die resistent is tegen medicijnen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Deze schimmel is waa"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "schijnlijk resistent geworden door het gebruik van"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Aspergillus fumigatus is een schimmel die algemeen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "aanwezig is in de bodem"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Als gevolg van een ziekte heeft Jasper echt er een sterk verlaagde weers"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "and, waardoor de schimmel een gev"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "Leg uit hoe deze twee celtypen samen tegengaan dat schimmelsporen de"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "lees verder Eendenkroos wordt al enkele jar"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Voeding en vertering",
+        "question": "t of eendenkroos ook geschikt is voor menselijke consumptie, omdat eiwitten zo via de kortst m ogelijke voedselk"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "gunstig, want bij elke schakel in de voedselketen gaat een groot deel van de energie ui t organische stoffen verloren"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Oorzaken van dit energieverlies zijn dat dode en niet eetbare delen niet gegeten worden en dat een deel van de or ganische stoffen in ontlasting terechtkomt"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Er is nog een belangrijke oorzaak van dit energieverlies"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Noteer die oorzaak"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ehalte is e"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "d verteerbaar zijn en bepaalde aminozuren bevatten"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Leg uit dat voor het bepale"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "an worden naar de toename v an de essenti le aminozuren dan naar de toename van niet e ssenti le aminozuren"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ouw worden groenten onder gec"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Door verticale landbouw is er minder landbouwgrond nodig"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Geef nog een ander argum ent waardoor de produc tie van groenten door middel van verticale landbouw ecologisch duurzamer kan zijn dan de productie van groenten vi a de gangbare akkerbouw"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "lees verder Tenzij anders vermel , is er sprake van normale situaties en gezonde organismen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "De Biesbosch is een waterrijk natuurgebied met veel"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Vanaf nam de populatie zeearenden in Duitsland toe door een afname van het gebruik van bepaalde insecticiden en door een jachtverbod"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Erfelijkheid",
+        "question": "afbeelding afbeelding Zeearenden werden al eerder in Nederland waar genomen, maar pas vanaf vestigden ze zich"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Dat kon doordat er steeds meer natte natuurgebieden ontstonden, waar vogels die prooi zijn voor de zeearend, in grote groepen"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "ng toont de plaatsen waar nu zeearenden"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Waarnemen",
+        "question": "Wat is de biologische term voor een geschikt leefgebied van e"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Ecologie",
+        "question": "ecosysteem populatie trofisch niveau De zeearend is in Nederland geen exoot"
+    },
+    {
+        "pdf": "2025I.txt",
+        "domain": "Onbekend",
+        "question": "Verklaar dit"
+    },
+    {
+        "pdf": "2025I bijlage.txt",
+        "domain": "Bloedsomloop",
+        "question": "nummer in afbeeldin mptoom bi tekort rode bloedcel witte bloedcel wel smaakwaarnemin een smaakwaarne"
+    },
+    {
+        "pdf": "2025I bijlage.txt",
+        "domain": "Onbekend",
+        "question": "Naam kandidaat"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "lees verder Bij een kat met chronisch nierfalen zijn"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "n te zien in een microscopisch preparaat van het nierweefsel"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "ulus is vergroot, en de rui"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "te in het kapsel van Bowman is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Afbeelding is een schematische tekening van het kapsel van Bowman met de glomerulus"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "is een foto van een microscopisch preparaat van nierweefsel van een kat met chronisch nierfalen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Welke letter in afbeelding geeft het kapsel van Bo"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "En op welke plaats in afbeelding is de doorsnede gemaa"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "kt van de niereenheid waar P en Q bij horen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "kapsel van Bowman plaats doorsnede letter P plaats letter P plaats letter Q plaats letter Q plaats Maureen geeft Rio voeding met een aange"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "Het eten van te veel eiwitten zou name lijk leiden tot de productie van veel ureum, wat schadelijk is voor Rio"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Hieronder staat hoe de grote hoeveelheid ureum ontstaat"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "Bij de vertering van de grote hoeveelhei"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "eiwitten worden veel"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "gevormd, die daarna worden geresorbeer d in de darm"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Een groot gedeelte hiervan wordt vervolgens afgebroken door de"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Schrijf de nummers en onder el kaar"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Noteer het woord dat op de bijbehorende plaats moet staan erachter"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "s teksten en afbeeldingen, is te vinden in het bij dit examen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "e correctievoorschrift"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "lees verder Het valt Andrea op dat er de afgelopen jaren in het Korenburgerveen steeds minder kleine zonnedauw te zien is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Mogelijk heeft de kleine zonnedauw in het gebied last van de stikstofuitstoot van het bedrijf van Andrea"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Kleine zonnedauw Drosera intermedia , afbeelding \\ is een plantje dat maximaal cm hoog wordt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "afbeelding Zonnedauw is een groep van vlees etende planten met groene bladeren en bladeren met kleverige druppels"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "heiden enzymen af, waardoor de insecten worden verteerd"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Verklaar dat zonnedauw tot de producenten behoort"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Onderzoekers in Zweden deden onderzoe"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Zij hebben een veld waar ronde zonnedauw \\ Drosera rotundifolia"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "schillende hoeveelheden van een anorganische st"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Plantenfysiologie",
+        "question": "ers hebben er vier jaar lang in september en in juni het aantal plantjes zonnedauw per vier kante meter geteld"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Behoort de zonnedauw uit het Zweedse onderzoek tot dezelfde soort als de zonnedauw in het Korenburgerveen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Voor dit examen zijn maximaal punten te behalen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Voor elk vraagnummer staat hoeveel punt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "aald kunnen worden"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Als bij een open vraag een verklaring, uitleg of berekening gev"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "raagd wordt, worden aan het antwoord meestal geen punten toegek end als deze verklaring, uitleg of berekening ontbreekt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Geef niet meer antwoor den \\ redenen, voorbeelden e"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "\\ dan er worden gevraagd"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "ee redenen wor den gevraagd en je geeft meer dan twee redenen, dan worden alleen de eerste twee in de beoordelin eteld"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "langrijk is dat hij op"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "De verspreiding van het pigment in de stervormige cellen wordt aangestuurd door het zenuwstelsel"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Bij andere diersoorten die van kleur kunnen veranderen, worden kleurverander ingen mee"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "Noteer een voordeel van aanstu ring door het zenuwstelsel"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Er zijn zo n soorten kameleons"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Deze zijn onderverdeeld in verschillende geslacht en \\ genera\\"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "In de stamboom is een aantal van deze geslachten te zien, waaronder ook het geslacht de driehoornkameleon behoort"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "t is de voorouder van alle andere geslac"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "e voorouder van het geslacht en het geslacht leefde in de geologische periode Jura"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "t is meer verwant met het geslacht dan met het geslacht"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Schrijf de nummers , en onder elkaar"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende uitspraak is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "lees verder Het nadeel van het gebruik van verse suikerbieten is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "dat deze niet het hele jaar beschikbaar zijn"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "ulp kan suikerbietensap worden gebruik"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "In tegenstelling tot pulp, is het sap lang houdbaar"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "De productie van sap uit suikerbieten kost echter veel m eer energie, waardoor deze manier van ethanol pr"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "oductie minder duurzaam is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Hieronder staan enkele waarden van de teelt en verwerking van suikerbieten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "hanol , kg per kg sachariden uitstoot bij gebruik pulp per kg bio ethanol uitstoot bij gebruik sap per kg bio ethanol Bereken hoeveel kilogram bio ethanol kan worden geproduceerd met de suikerbietenopbrengst van n hectare"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Bereken hoeveel kilogram CO er minder vrijkomt per hectare aan suikerbieten door gebruik van pulp in plaats van sap"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Verklaar dat het gebruik van bio et hanol uit suikerbieten minder bijdraagt aan het versterkte broeikaseffect"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "lees verder Tenzij anders vermel , is er sprake van normale situaties en gezonde organismen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Fallot Britt is zestien jaar en heeft de tetralogie van Fallot,"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "ng is ze sneller moe dan haar leeftijdsgenoten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "Ze heeft al twee hartoperaties gehad"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "De hartafwijking van Britt is al vroeg tijdens de embryonale ontwikkeling ontstaan"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Bij de tetralogie van Fallot is d"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Ook is er een opening tussen de linkerkamer en de rechterkamer"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "afbeelding In de tekst worden drie verschi llen genoemd ten opzichte van een normaal gebouwd hart"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "In afbeelding is een vierde verschil zichtbaar"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer dit vierde verschil"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Toen Britt zes maanden oud was, heeft ze een operatie gehad"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Bij deze operatie is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "r wijder gemaakt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "De hartchirurg heeft toen de wand v"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "neden en opgevuld met een stukje kunststof weefsel \\ een patch ,"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Het nadeel van zo n operatie is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "meer volledig sluit, waardoor bloed kan terugstromen naar het hart"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Verklaar je antwoord"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Ademhaling",
+        "question": "lees verder De ademhaling wordt automatisch geregeld door het adem centrum"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Zenuwstelsel en hormonen",
+        "question": "De afbeelding hieronder is een leng tedoorsnede van de hersenen en een deel van het ruggenmerg"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Hierin zijn vers"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "In welk deel vindt de automatisc he regeling van de ademhalin"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "automatische regeling door"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "deel P deel T deel R Het project Partridge is een project van vijf Europese lande"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "De patrijs kan hiervan profiteren"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "chikte broedplaatsen snel af, waardoor het aantal patrijzen met % gedaald is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Onlangs heeft Britt haar tweede har toperatie gehad"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Britt is nu minder snel moe"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "lijk Welke afbeelding geeft de aansluit ing van de hart l"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "omloop, en de stroomrichting van het bloed juist weer"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "lees verder De resultaten van het onderzoek staan in afbeelding"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "aar is de optimum waarde v oor stikstofbemesting van ronde zonnedauw"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Plantenfysiologie",
+        "question": "Er is verband tussen de toegediende hoeveelheid stikstof en het aantal plantjes van ronde zonnedauw"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "rveen wordt veroorzaakt door een ver"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende conclus"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "e getrokken mag worden op basis van het Zweedse onderzoek"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "In veel natuurgebieden in Nederland staat op plaatsen waar eerst voornamelijk kleine zonnedauw groeide,"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "nu vooral veenpluis"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Dit is het gevolg van de hogere stikstofconcentraties in die gebieden"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Veenpluis \\ Eriophorum , afbeelding \\ is een grassoort die maximaal cm hoog wordt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Beredeneer dat er bij hogere stikstof concentraties steeds meer veenpluis"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "en steeds minder kleine zonnedauw aanwezig is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Beweging",
+        "question": "Ook hun botten en spieren zijn zwar t"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Melanine wordt gepr oduceerd door pigmentcellen: de melanocyten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende uitspraak Ayam cemani s en sv"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "arth na s hebben dezelfde, uiterst compl xe, mutatie aan het EDN gen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Verklaar dat het waarschijnlijk is dat de mutatie aan het EDN gen b"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "ij de ayam cemani s en die bij de sva rth na s onafhankelijk van elkaar zijn ontstaan"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Rio is erg vermagerd"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "De dierenarts heeft de urine en het bloed v an Rio laten onderzoeke"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Daaruit bleek dat ze aan chronisch nierfalen lijdt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Bij chronis"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "h nierfalen is de nier functie sterk verminderd, waardoor afvalstoffen zich ophopen in het bloed"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Katten met chronisch nierfalen drinken daardoor veel"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "De osmotische waarde van het bloed daa"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "De osmotische waarde van het bloed stijgt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Wat is de volgorde v"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer de bijb ehorende nummers in de juiste volgorde"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "De dierenarts bepaalt bij het urine"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "De dichtheid van water is ongeveer gram"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Een zoutoplossing heeft een hogere dic"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "de dicht heid van de urine van katten lager is dan gram"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": ", zijn er mogelijk nierproblemen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "Vindt er in de nieren van Rio te veel of te weinig reabsorptie \\ terugresorptie\\ van water plaats"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "reabsorptie hoeveelheid urine te veel meer te veel minder te weinig"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "meer te weinig minder In het bloed van Rio wordt een te hoog ureum gehalte gemeten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Ureum wordt in de lever aangemaakt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer de bijbehorende nummers in de juiste volgorde"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "ameleons die op Oahu leven, zijn kleurrijker dan de driehoornkameleons die in Kenia leven"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "ameleons op Oahu, is de afwezigheid van predatoren"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Er zullen echter ook andere factoren een rol gespeeld hebben"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Verklaar aan de hand van een andere biotische factor dan predatie, dat de driehoornkameleons ko nden overleven op Oahu"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Ecologie",
+        "question": "Verklaar aan de hand van een abiotische factor dat de"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "De driehoornkameleons uit Oahu en Kenia zijn geog"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "rafisch gescheiden"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Toch is het waarschijnlijk dat zij nog steeds samen vruchtbare nakomelingen kunnen krijgen, en daarm ee tot dezelfde soort behoren"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Verklaar waarom het waarschijnlijk is dat de driehoornkameleons uit Oahu en Kenia ge v"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "olueerd zijn tot twee soorten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "nkameleons op Oahu en in Kenia worden veroorzaakt door genetische verschillen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "In Kenia hebben de felgek"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer erachter of de bijbehorende uitspraak of"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "an zijn voor het genetische verschil in"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "De kleur van kameleons wordt bepaa ld door de rangschikking van verschillende moleculen in de ce llen van de huid en door stervormige cellen met zwart pigment"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Het pigm ent in de stervormige cellen kan verspreid of geconcentreerd wor den, waardoor de huid donk"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "erder of lichter wordt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Bloedsomloop",
+        "question": "Hiermee reguleert de ka meleon, die koudbloedig is, zijn lichaamstemperatuur"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "In de ochtend zijn kameleons d"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "onkerder van kleur, waardoor ze sneller opwarmen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "lees verder Het broedsucces van de patrijs hangt vooral af van de beschutting en de hoeveelheid insecten in de direc"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "afbeelding Tot welk trofisch niveau behoort een pat rijskuiken"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "En tot welk trofisch niveau behoort een volwass"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "en patrijs alleen consument e orde alleen consument e orde alleen consument e orde consument e orde en hoger alleen consument e orde alleen consument e orde alleen consument e orde consument e orde en hoger consument e orde en hoger alleen consument e orde consument e orde en hoger consument e orde en hoger In de onderstaande tabel is te zien dat de voedingswaarde van insecten verschilt van de voedings"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "swaarde per edeelte energie koolhydraten vetten"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "ten insecten , , , Licht toe aan de hand van de tabel dat in"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "secten het meest geschikt zijn als voedsel voor groeiende patrijskuikens"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "lees verder Ademtherapie bij long covid Jean heeft maanden nadat hij c"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Ademhaling",
+        "question": "Zijn huisarts vermoedt het post covidsyndroom \\ long covid\\"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "en zelftest om te zien of er bepaalde antigenen in zijn"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Bij de PCR te st wordt onderzocht of in het"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Afweer",
+        "question": "virus aanwezig zijn"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Wat wordt aangetoond bij de zel ftest"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "zelftest PCR test bepaald genetisch materiaal een bepaalde aminoz"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "uurvolgorde bepaald genetisch materiaal een bepaalde nucleotidenvo"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "de bepaalde eiwitten een bepaalde"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "uurvolgorde bepaalde eiwitten een bepaalde"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Kortademigheid kan ontstaan als de diffu siesnelheid van zuurstof van de lucht in de longblaasjes naar het bloed verandert"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "kun je bepalen met de onderstaande formule"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "s meer slijm aanwezig is, verandert de diffusie afstand"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Ademhaling",
+        "question": "Als er minder longblaasjes zijn, wordt een andere factor uit de formule kleiner"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Is de diffusie afstand \\ \\ door het extra slijm grot er of kleiner geworden"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Ademhaling",
+        "question": "ctor is kleiner al s er minder longblaas"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "factor die kleiner is door extra"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "eit op akkers vergroot kan worden door het aanleggen van"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "is een strook grond van tot centimeter hoog, met daarop een lage begroeiing van grassen en stru ikjes"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "afbeelding Op de braakliggende grond kunnen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Wat is de naam van de relati e tussen de patrijs en de mijt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "commensalisme mutualisme parasitisme predatie De hypothese van de ecologen is: een keverbank vergroot de overlevingskans van patrijskuik"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Om dit te testen hebben een aantal akkerbouwers keverbanken aangelegd"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "groter is dan op akkers zonder keverbank"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Hierdoor is de kans op broedsucces van de patrijs er groter"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Om hun hypothese te testen, ke ken de ecologen naar een bepaald gedeelte van het diagram"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Licht toe welk gedeelte"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Nadat de eieren zijn uitgekomen, maakt Freek een stamboom van de ouders en de kuikens"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Voor het fokken zou het gunstig zijn als de haan homozygoot is voor de autosomaal o"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Wat is de kans dat haan homozygoot is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Om uit te sluiten dat haan heterozygoot is voor de eigens"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "chap fibromelanose, kruist Freek hem met het lichtbruine hennetje"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Noteer de mogelijke fenotypen van de nakomelingen van deze kruising als haan Noteer de verhouding waarin de ze fenotypen dan aanwez"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Fokkers kruisen vaker broers en zussen onderling om"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Hierbij is de kans echter ook groot dat recessieve erfelijke"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Verklaar hoe inteelt leidt tot er felijke afwijkingen b ij de nakomelin"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "lees verder Groene energie nog groener Biobrandstoffen kunnen een duurzaam al ternatief zijn voor fossiele brandstoffen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Waarnemen",
+        "question": "Doordat suikerbieten veel sacharose bevatten, zijn ze erg geschikt voor de productie van bio"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "De verse suikerbieten worden gewasse"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "De pulp wordt"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "verhit om micro organism en te doden"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "afgekoeld, wordt deze in een bioreactor gebracht waarin gistcellen aanwezig zijn"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "De gistcellen gaan dan ethanol pr"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Daarom worden bep"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Voeding en vertering",
+        "question": "Geef de naam van een enzym dat voor dit doel kan worden Verklaar hoe toevoeging van dit enzym de ethanol"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "Voor de productie van ethanol is het belangrijk dat er zuurstof ig is bij de gis"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Noteer de naam van het proces dat in deze gistcelle"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "n optreedt waardoor Als er zuurstof aanwez"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "re eindproducten ontstaan in de gistcellen"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Geef de namen van de eindpro"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Stofwisseling van de cel",
+        "question": "en die ontstaan bij het proces dat plaatsvindt als zuurstof aanwezig is"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "Stefan Hol stelde het volgende model op om deze uitstoot per kilogram suik erbiet te kunnen ber"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Onbekend",
+        "question": "Stefan Hol gebruikte in zijn ber"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Erfelijkheid",
+        "question": "gen gemiddelde waarden en ging uit van de situatie zoals die in"
+    },
+    {
+        "pdf": "2025II.txt",
+        "domain": "Uitscheiding",
+        "question": "Geef een manier waar op akkerbouwers bij de t eelt van suikerbieten de uitstoot per kilogram su ikerbiet kunnen verminderen"
+    }
+]";
+        
+        // Filter and display functions
+        function filterQuestions() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const domainFilter = document.getElementById('domain-filter').value;
+            const pdfFilter = document.getElementById('pdf-filter').value;
+            
+            const filtered = questionsData.filter(q => {
+                const matchesSearch = !searchTerm || q.question.toLowerCase().includes(searchTerm);
+                const matchesDomain = !domainFilter || q.domain === domainFilter;
+                const matchesPdf = !pdfFilter || q.pdf === pdfFilter;
+                return matchesSearch && matchesDomain && matchesPdf;
+            });
+            
+            displayQuestions(filtered);
+            updateResultsCount(filtered.length);
+        }
+        
+        function displayQuestions(questions) {
+            const container = document.getElementById('questions-container');
+            
+            if (questions.length === 0) {
+                container.innerHTML = '<div class="no-results">Geen vragen gevonden die voldoen aan de criteria.</div>';
+                return;
+            }
+            
+            // Group by domain
+            const grouped = {};
+            questions.forEach(q => {
+                if (!grouped[q.domain]) grouped[q.domain] = [];
+                grouped[q.domain].push(q);
+            });
+            
+            let html = '';
+            for (const [domain, domainQuestions] of Object.entries(grouped)) {
+                html += `<div class="domain-section" id="${domain}">`;
+                html += `<div class="domain-header">`;
+                html += `<h3>${domain}</h3>`;
+                html += `<span class="domain-badge">${domainQuestions.length} vragen</span>`;
+                html += `</div>`;
+                html += `<ul class="question-list">`;
+                
+                domainQuestions.forEach(q => {
+                    html += `<li class="question-item">`;
+                    html += `<div class="question-header">`;
+                    html += `<span class="question-domain">${q.domain}</span>`;
+                    html += `<span class="question-pdf">${q.pdf.replace('.pdf', '')}</span>`;
+                    html += `</div>`;
+                    html += `<div class="question-text">${q.question}</div>`;
+                    html += `</li>`;
+                });
+                
+                html += `</ul>`;
+                html += `</div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function updateResultsCount(count) {
+            const total = questionsData.length;
+            document.getElementById('results-count').textContent = 
+                `Gevonden: ${count} van ${total} vragen`;
+        }
+        
+        // Event listeners
+        document.getElementById('search-input').addEventListener('input', filterQuestions);
+        document.getElementById('domain-filter').addEventListener('change', filterQuestions);
+        document.getElementById('pdf-filter').addEventListener('change', filterQuestions);
+        
+        // Initial display
+        displayQuestions(questionsData);
+        updateResultsCount(questionsData.length);
+        
+        // Smooth scroll for domain links
+        document.querySelectorAll('.domain-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const domain = this.getAttribute('href').substring(1);
+                const element = document.getElementById(domain);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
