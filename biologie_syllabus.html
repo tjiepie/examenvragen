@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biologie Syllabus - HAVO & VWO</title>
+    <style>
+        :root {
+            --primary-color: #2c7be5;
+            --secondary-color: #f8f9fa;
+            --havo-color: #28a745;
+            --vwo-color: #dc3545;
+            --border-color: #dee2e6;
+            --text-color: #212529;
+            --hover-color: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: var(--text-color);
+            margin: 15px 0 10px 0;
+        }
+
+        .level-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .level-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--secondary-color);
+        }
+
+        .level-option:hover {
+            background: var(--hover-color);
+        }
+
+        .level-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .level-option input[type="radio"] {
+            display: none;
+        }
+
+        .level-option .havo-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--havo-color);
+            border-radius: 50%;
+        }
+
+        .level-option .vwo-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--vwo-color);
+            border-radius: 50%;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-container input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .domain {
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .domain-header {
+            background: var(--secondary-color);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .domain-header:hover {
+            background: var(--hover-color);
+        }
+
+        .domain-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .toggle-icon {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .subdomains {
+            padding: 0;
+            list-style: none;
+            background: white;
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .subdomains.collapsed {
+            max-height: 0;
+        }
+
+        .subdomain-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subdomain-item:last-child {
+            border-bottom: none;
+        }
+
+        .subdomain-item:hover {
+            background: var(--hover-color);
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .level-badge.havo {
+            background: var(--havo-color);
+        }
+
+        .level-badge.vwo {
+            background: var(--vwo-color);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .add-section {
+            margin-top: 40px;
+            padding: 20px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            background: var(--secondary-color);
+        }
+
+        .add-section button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .add-section button:hover {
+            background: #1a5bc4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-buttons .save {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-buttons .cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        .modal-buttons button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .level-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Biologie Syllabus</h1>
+
+        <div class="level-selector">
+            <label class="level-option selected" data-level="both">
+                <input type="radio" name="level" value="both" checked>
+                <span>Alle Niveaus</span>
+            </label>
+            <label class="level-option" data-level="havo">
+                <input type="radio" name="level" value="havo">
+                <span class="havo-indicator"></span>
+                <span>HAVO</span>
+            </label>
+            <label class="level-option" data-level="vwo">
+                <input type="radio" name="level" value="vwo">
+                <span class="vwo-indicator"></span>
+                <span>VWO</span>
+            </label>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Zoek domeinen of subdomeinen...">
+        </div>
+
+        <div class="content" id="content">
+            <!-- Domeinen en subdomeinen worden hier dynamisch ingeladen -->
+        </div>
+
+        <div class="add-section">
+            <p>Voeg nieuwe domeinen of subdomeinen toe:</p>
+            <button id="addDomainBtn">Voeg Domein Toe</button>
+            <button id="addSubdomainBtn">Voeg Subdomein Toe</button>
+        </div>
+    </div>
+
+    <!-- Modal voor toevoegen/bewerken -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Voeg toe</h2>
+            <form id="modalForm">
+                <input type="hidden" id="editId">
+                <input type="hidden" id="editType">
+                <div class="form-group">
+                    <label for="name">Naam:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group" id="parentGroup" style="display: none;">
+                    <label for="parent">Hoort bij Domein:</label>
+                    <select id="parent" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Beschrijving:</label>
+                    <textarea id="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Niveau:</label>
+                    <div style="display: flex; gap: 15px; margin-top: 5px;">
+                        <label>
+                            <input type="checkbox" id="levelHavo" value="havo"> HAVO
+                        </label>
+                        <label>
+                            <input type="checkbox" id="levelVwo" value="vwo"> VWO
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="cancel" id="cancelBtn">Annuleren</button>
+                    <button type="submit" class="save" id="saveBtn">Opslaan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Syllabus data in JSON-formaat voor gemakkelijke uitbreiding
+        let syllabusData = {
+            domains: [
+                {
+                    id: 1,
+                    name: "Inleiding Biologie",
+                    description: "Basisprincipes van de biologie, wetenschappelijke methoden en veiligheid.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 101,
+                            name: "Wetenschappelijke methode",
+                            description: "Hypothese, experiment, conclusie.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 102,
+                            name: "Veiligheid in het lab",
+                            description: "PBM's, veiligheidsvoorschriften.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 103,
+                            name: "Biologische tekeningen",
+                            description: "Microscoopgebruik, tekenen en labelen.",
+                            levels: ["havo", "vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Cellen en organellen",
+                    description: "Opbouw en functie van cellen en celorganellen.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 201,
+                            name: "Celtheorie",
+                            description: "Geschiedenis en basisprincipes.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 202,
+                            name: "Prokaryote en eukaryote cellen",
+                            description: "Verschillen en voorbeelden.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 203,
+                            name: "Celorganellen",
+                            description: "Mitochondriën, chloroplasten, ER, golgi, etc.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 204,
+                            name: "Celmembraan en transport",
+                            description: "Diffusie, osmose, actief en passief transport.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 205,
+                            name: "Celcyclus en mitose",
+                            description: "Fasen van de celcyclus, mitose en meiotische deling.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Stofwisseling",
+                    description: "Energie-omzettingen in organismen.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 301,
+                            name: "Fotosynthese",
+                            description: "Lichtreacties, Calvincyclus, factoren die fotosynthese beïnvloeden.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 302,
+                            name: "Celademhaling",
+                            description: "Glycolyse, Krebscyclus, oxidatieve fosforylering.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 303,
+                            name: "Anaerobe dissimilatie",
+                            description: "Gisting en melkzuurvorming.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 304,
+                            name: "Enzymen",
+                            description: "Werking, factoren die enzymactiviteit beïnvloeden.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 305,
+                            name: "ATP en energiestofwisseling",
+                            description: "Rol van ATP, energiebalans.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Homeostase",
+                    description: "Handhaven van een stabiele interne omgeving.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 401,
+                            name: "Temperatuurregulatie",
+                            description: "Huid, zweten, rillen.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 402,
+                            name: "Water- en zouthuishouding",
+                            description: "Nieren, ADH, aldosteron.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 403,
+                            name: "Bloedsuikerspiegel",
+                            description: "Insuline, glucagon, diabetes.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 404,
+                            name: "Hormonen",
+                            description: "Endocriene klieren, feedbackmechanismen.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Erfelijkheid",
+                    description: "Overerving van kenmerken.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 501,
+                            name: "Mendeliaanse erfelijkheid",
+                            description: "Dominant, recessief, monohybride en dihybride kruisingen.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 502,
+                            name: "Chromosomen en genen",
+                            description: "Ligging van genen, geslachtsgebonden erfelijkheid.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 503,
+                            name: "DNA en eiwitsynthese",
+                            description: "Transcriptie, translatie, mutaties.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 504,
+                            name: "Moleculaire biologie",
+                            description: "PCR, gel-electroforese, CRISPR.",
+                            levels: ["vwo"]
+                        },
+                        {
+                            id: 505,
+                            name: "Populatiegenetica",
+                            description: "Hardy-Weinberg, selectie, genetische drift.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Evolutie",
+                    description: "Verandering in populaties door de tijd.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 601,
+                            name: "Natuurlijke selectie",
+                            description: "Darwin's theorie, aanpassingen.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 602,
+                            name: "Soortenvorming",
+                            description: "Allopatrische en sympatrische speciatie.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 603,
+                            name: "Fylogenie",
+                            description: "Stamboom van het leven, homologe structuren.",
+                            levels: ["vwo"]
+                        },
+                        {
+                            id: 604,
+                            name: "Moleculaire evolutie",
+                            description: "DNA-sequenties, moleculaire klok.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 7,
+                    name: "Ecologie",
+                    description: "Interacties tussen organismen en hun omgeving.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 701,
+                            name: "Voedselweb en voedselketen",
+                            description: "Producenten, consumenten, reducenten.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 702,
+                            name: "Populatie-ecologie",
+                            description: "Groei, draagkracht, logistische groei.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 703,
+                            name: "Ecosystemen",
+                            description: "Biomen, energie- en stofstromen.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 704,
+                            name: "Menselijke invloed",
+                            description: "Vervuiling, klimaatverandering, biodiversiteit.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 705,
+                            name: "Symbiose",
+                            description: "Mutualisme, commensalisme, parasitisme.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 8,
+                    name: "Plantkunde",
+                    description: "Structuur en functie van planten.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 801,
+                            name: "Plantencel",
+                            description: "Celwand, vacuole, chloroplasten.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 802,
+                            name: "Plantweefsels",
+                            description: "Epidermis, xyleem, floëem, merg.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 803,
+                            name: "Fotosynthese in planten",
+                            description: "Bladopbouw, stomata, C4- en CAM-planten.",
+                            levels: ["vwo"]
+                        },
+                        {
+                            id: 804,
+                            name: "Plantengroei en ontwikkeling",
+                            description: "Hormonen (auxine, gibberelline), fototropisme.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 9,
+                    name: "Dierkunde",
+                    description: "Structuur en functie van dieren.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 901,
+                            name: "Dierlijke cellen en weefsels",
+                            description: "Epitelweefsel, spierweefsel, zenuwweefsel.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 902,
+                            name: "Spijsvertering",
+                            description: "Mond, slokdarm, maag, dunne en dikke darm.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 903,
+                            name: "Ademhaling",
+                            description: "Longen, gaswisseling, transport van O2 en CO2.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 904,
+                            name: "Bloedsomloop",
+                            description: "Hart, bloedvaten, bloed.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 905,
+                            name: "Uitscheiding",
+                            description: "Nieren, lever, huid.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 906,
+                            name: "Zenuwstelsel",
+                            description: "Hersenen, ruggenmerg, zenuwen, reflexen.",
+                            levels: ["vwo"]
+                        },
+                        {
+                            id: 907,
+                            name: "Immuunsysteem",
+                            description: "Natuurlijke en verworven immuniteit, vaccins.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 10,
+                    name: "Gedrag",
+                    description: "Observatie en analyse van diergedrag.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 1001,
+                            name: "Innate gedrag",
+                            description: "Aangeboren gedragspatronen (reflexen, instincten).",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 1002,
+                            name: "Geleerd gedrag",
+                            description: "Classical conditioning, operant conditioning.",
+                            levels: ["havo", "vwo"]
+                        },
+                        {
+                            id: 1003,
+                            name: "Sociaal gedrag",
+                            description: "Hiërarchie, territorialiteit, communicatie.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                },
+                {
+                    id: 11,
+                    name: "Biotechnologie",
+                    description: "Toepassingen van biologie in technologie.",
+                    levels: ["havo", "vwo"],
+                    subdomains: [
+                        {
+                            id: 1101,
+                            name: "Fermentatie",
+                            description: "Toepassingen in voedselindustrie.",
+                            levels: ["havo"]
+                        },
+                        {
+                            id: 1102,
+                            name: "Genetische modificatie",
+                            description: "GGO's, CRISPR-Cas9.",
+                            levels: ["vwo"]
+                        },
+                        {
+                            id: 1103,
+                            name: "Biomedische toepassingen",
+                            description: "Gentherapie, stamcellen.",
+                            levels: ["vwo"]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Huidig geselecteerd niveau
+        let currentLevel = "both";
+
+        // Functie om domeinen en subdomeinen weer te geven
+        function renderContent() {
+            const content = document.getElementById("content");
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+            // Filter domeinen op niveau en zoekterm
+            const filteredDomains = syllabusData.domains.filter(domain => {
+                const matchesLevel = currentLevel === "both" || domain.levels.includes(currentLevel);
+                const matchesSearch = domain.name.toLowerCase().includes(searchTerm) ||
+                                    domain.description.toLowerCase().includes(searchTerm) ||
+                                    domain.subdomains.some(sub => 
+                                        sub.name.toLowerCase().includes(searchTerm) ||
+                                        sub.description.toLowerCase().includes(searchTerm)
+                                    );
+                return matchesLevel && matchesSearch;
+            });
+
+            if (filteredDomains.length === 0) {
+                content.innerHTML = '<div class="no-results">Geen resultaten gevonden.</div>';
+                return;
+            }
+
+            let html = "";
+            filteredDomains.forEach(domain => {
+                // Filter subdomeinen op niveau en zoekterm
+                const filteredSubdomains = domain.subdomains.filter(sub => {
+                    const matchesLevel = currentLevel === "both" || sub.levels.includes(currentLevel);
+                    const matchesSearch = sub.name.toLowerCase().includes(searchTerm) ||
+                                         sub.description.toLowerCase().includes(searchTerm);
+                    return matchesLevel && matchesSearch;
+                });
+
+                if (filteredSubdomains.length === 0 && searchTerm !== "") return;
+
+                html += `
+                    <div class="domain">
+                        <div class="domain-header" onclick="toggleDomain(${domain.id})">
+                            <h3>${domain.name}</h3>
+                            <span class="toggle-icon" id="toggle-${domain.id}">▼</span>
+                        </div>
+                        <ul class="subdomains" id="subdomains-${domain.id}">
+                `;
+
+                filteredSubdomains.forEach(subdomain => {
+                    const levelBadges = subdomain.levels.map(level => 
+                        `<span class="level-badge ${level}">${level.toUpperCase()}</span>`
+                    ).join("");
+
+                    html += `
+                        <li class="subdomain-item">
+                            <div>
+                                <strong>${subdomain.name}</strong> ${levelBadges}
+                                ${subdomain.description ? `<p style="margin: 5px 0 0 0; font-size: 14px; color: #6c757d;">${subdomain.description}</p>` : ""}
+                            </div>
+                        </li>
+                    `;
+                });
+
+                html += `
+                        </ul>
+                    </div>
+                `;
+            });
+
+            content.innerHTML = html;
+
+            // Voeg event listeners toe voor toggle
+            syllabusData.domains.forEach(domain => {
+                const toggleIcon = document.getElementById(`toggle-${domain.id}`);
+                const subdomainsList = document.getElementById(`subdomains-${domain.id}`);
+                if (toggleIcon && subdomainsList) {
+                    toggleIcon.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        toggleDomain(domain.id);
+                    });
+                }
+            });
+        }
+
+        // Functie om domeinen in/uit te klappen
+        function toggleDomain(domainId) {
+            const subdomainsList = document.getElementById(`subdomains-${domainId}`);
+            const toggleIcon = document.getElementById(`toggle-${domainId}`);
+            if (subdomainsList && toggleIcon) {
+                subdomainsList.classList.toggle("collapsed");
+                toggleIcon.classList.toggle("collapsed");
+            }
+        }
+
+        // Functie om niveau te selecteren
+        function selectLevel(level) {
+            currentLevel = level;
+            document.querySelectorAll(".level-option").forEach(option => {
+                option.classList.remove("selected");
+            });
+            document.querySelector(`[data-level="${level}"]`).classList.add("selected");
+            renderContent();
+        }
+
+        // Functie om modal te openen
+        function openModal(type, id = null) {
+            const modal = document.getElementById("modal");
+            const modalTitle = document.getElementById("modalTitle");
+            const editId = document.getElementById("editId");
+            const editType = document.getElementById("editType");
+            const nameInput = document.getElementById("name");
+            const descriptionInput = document.getElementById("description");
+            const parentGroup = document.getElementById("parentGroup");
+            const parentSelect = document.getElementById("parent");
+            const havoCheckbox = document.getElementById("levelHavo");
+            const vwoCheckbox = document.getElementById("levelVwo");
+
+            modal.classList.add("active");
+
+            if (type === "domain") {
+                modalTitle.textContent = id ? "Bewerk Domein" : "Voeg Domein Toe";
+                editType.value = "domain";
+                parentGroup.style.display = "none";
+
+                if (id) {
+                    const domain = syllabusData.domains.find(d => d.id === id);
+                    editId.value = id;
+                    nameInput.value = domain.name;
+                    descriptionInput.value = domain.description || "";
+                    havoCheckbox.checked = domain.levels.includes("havo");
+                    vwoCheckbox.checked = domain.levels.includes("vwo");
+                } else {
+                    editId.value = "";
+                    nameInput.value = "";
+                    descriptionInput.value = "";
+                    havoCheckbox.checked = true;
+                    vwoCheckbox.checked = true;
+                }
+            } else if (type === "subdomain") {
+                modalTitle.textContent = id ? "Bewerk Subdomein" : "Voeg Subdomein Toe";
+                editType.value = "subdomain";
+                parentGroup.style.display = "block";
+
+                // Vul parent select in
+                parentSelect.innerHTML = "";
+                syllabusData.domains.forEach(domain => {
+                    const option = document.createElement("option");
+                    option.value = domain.id;
+                    option.textContent = domain.name;
+                    parentSelect.appendChild(option);
+                });
+
+                if (id) {
+                    const subdomain = findSubdomainById(id);
+                    if (subdomain) {
+                        editId.value = id;
+                        nameInput.value = subdomain.name;
+                        descriptionInput.value = subdomain.description || "";
+                        parentSelect.value = subdomain.parentId;
+                        havoCheckbox.checked = subdomain.levels.includes("havo");
+                        vwoCheckbox.checked = subdomain.levels.includes("vwo");
+                    }
+                } else {
+                    editId.value = "";
+                    nameInput.value = "";
+                    descriptionInput.value = "";
+                    parentSelect.value = syllabusData.domains[0]?.id || "";
+                    havoCheckbox.checked = true;
+                    vwoCheckbox.checked = true;
+                }
+            }
+        }
+
+        // Functie om subdomein te vinden op ID
+        function findSubdomainById(id) {
+            for (const domain of syllabusData.domains) {
+                const subdomain = domain.subdomains.find(sub => sub.id === id);
+                if (subdomain) {
+                    subdomain.parentId = domain.id;
+                    return subdomain;
+                }
+            }
+            return null;
+        }
+
+        // Functie om modal te sluiten
+        function closeModal() {
+            document.getElementById("modal").classList.remove("active");
+        }
+
+        // Functie om wijzigingen op te slaan
+        function saveChanges() {
+            const editId = document.getElementById("editId").value;
+            const editType = document.getElementById("editType").value;
+            const name = document.getElementById("name").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const parentId = document.getElementById("parent").value;
+            const havoChecked = document.getElementById("levelHavo").checked;
+            const vwoChecked = document.getElementById("levelVwo").checked;
+
+            if (!name) {
+                alert("Vul een naam in.");
+                return;
+            }
+
+            const levels = [];
+            if (havoChecked) levels.push("havo");
+            if (vwoChecked) levels.push("vwo");
+
+            if (editType === "domain") {
+                if (editId) {
+                    // Bewerk bestaand domein
+                    const domain = syllabusData.domains.find(d => d.id === parseInt(editId));
+                    if (domain) {
+                        domain.name = name;
+                        domain.description = description;
+                        domain.levels = levels;
+                    }
+                } else {
+                    // Voeg nieuw domein toe
+                    const newId = syllabusData.domains.length > 0 ? 
+                        Math.max(...syllabusData.domains.map(d => d.id)) + 1 : 1;
+                    syllabusData.domains.push({
+                        id: newId,
+                        name: name,
+                        description: description,
+                        levels: levels,
+                        subdomains: []
+                    });
+                }
+            } else if (editType === "subdomain") {
+                if (editId) {
+                    // Bewerk bestaand subdomein
+                    const subdomain = findSubdomainById(parseInt(editId));
+                    if (subdomain) {
+                        subdomain.name = name;
+                        subdomain.description = description;
+                        subdomain.levels = levels;
+                    }
+                } else {
+                    // Voeg nieuw subdomein toe
+                    const domain = syllabusData.domains.find(d => d.id === parseInt(parentId));
+                    if (domain) {
+                        const newId = domain.subdomains.length > 0 ?
+                            Math.max(...domain.subdomains.map(sub => sub.id)) + 1 :
+                            domain.id * 100 + 1;
+                        domain.subdomains.push({
+                            id: newId,
+                            name: name,
+                            description: description,
+                            levels: levels
+                        });
+                    }
+                }
+            }
+
+            closeModal();
+            renderContent();
+        }
+
+        // Event listeners
+        document.addEventListener("DOMContentLoaded", () => {
+            // Selecteer niveau
+            document.querySelectorAll(".level-option").forEach(option => {
+                option.addEventListener("click", () => {
+                    selectLevel(option.dataset.level);
+                });
+            });
+
+            // Zoekfunctie
+            document.getElementById("searchInput").addEventListener("input", renderContent);
+
+            // Modal buttons
+            document.getElementById("addDomainBtn").addEventListener("click", () => openModal("domain"));
+            document.getElementById("addSubdomainBtn").addEventListener("click", () => openModal("subdomain"));
+            document.getElementById("cancelBtn").addEventListener("click", closeModal);
+            document.getElementById("modalForm").addEventListener("submit", (e) => {
+                e.preventDefault();
+                saveChanges();
+            });
+
+            // Sluit modal als je buiten klikt
+            document.getElementById("modal").addEventListener("click", (e) => {
+                if (e.target === e.currentTarget) {
+                    closeModal();
+                }
+            });
+
+            // Initial render
+            renderContent();
+        });
+    </script>
+</body>
+</html>
