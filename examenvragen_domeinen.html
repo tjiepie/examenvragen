@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examenvragen HAVO Biologie - Domeinen Overzicht</title>
+    <title>Examenvragen HAVO Biologie - Domeinen Overzicht & Export</title>
     <style>
         * {
             box-sizing: border-box;
@@ -102,6 +102,7 @@
             gap: 15px;
             flex-wrap: wrap;
             align-items: center;
+            margin-bottom: 15px;
         }
         
         .search-input {
@@ -119,19 +120,49 @@
             border-color: #3498db;
         }
         
-        .filter-select {
+        .filter-select, .btn {
             padding: 12px 20px;
             border: 2px solid #ddd;
             border-radius: 25px;
             font-size: 1em;
             background: white;
             cursor: pointer;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         
-        .filter-select:focus {
+        .filter-select:focus, .btn:focus {
             outline: none;
             border-color: #3498db;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
         }
         
         .results-count {
@@ -156,6 +187,8 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .domain-header h3 {
@@ -183,11 +216,18 @@
             border-radius: 8px;
             border-left: 4px solid #bdc3c7;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .question-item:hover {
             background: #f0f4f8;
             border-left-color: #3498db;
+            transform: translateX(5px);
+        }
+        
+        .question-item.selected {
+            background: #e3f2fd;
+            border-left-color: #2980b9;
             transform: translateX(5px);
         }
         
@@ -253,19 +293,93 @@
             font-size: 0.9em;
         }
         
-        @media (max-width: 768px) {
-            .search-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-input, .filter-select {
-                width: 100%;
-            }
-            
-            .domain-grid {
-                grid-template-columns: 1fr;
-            }
+        .export-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .export-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .export-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+        
+        .selected-count {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            font-weight: bold;
+        }
+        
+        .tab:hover {
+            color: #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .highlight {
@@ -273,129 +387,361 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        
+        @media (max-width: 768px) {
+            .search-controls, .export-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select, .btn {
+                width: 100%;
+            }
+            
+            .domain-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalopen 0.3s;
+        }
+        
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        textarea.export-text {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9em;
+            resize: none;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>📚 Examenvragen HAVO Biologie</h1>
-            <p>Domeinen Overzicht - 2025 Examens</p>
+            <p>Domeinen Overzicht & Export - 2025 Examens</p>
         </header>
         
-        <section class="stats-overview">
-            <div class="stat-card">
-                <h3>Totaal Vragen</h3>
-                <div class="number" id="total-questions">479</div>
-                <div class="percentage">100%</div>
-            </div>
-            <div class="stat-card">
-                <h3>Domeinen</h3>
-                <div class="number" id="total-domains">13</div>
-                <div class="percentage">actief</div>
-            </div>
-            <div class="stat-card">
-                <h3>Examens</h3>
-                <div class="number">3</div>
-                <div class="percentage">2025 I & II</div>
-            </div>
-            <div class="stat-card">
-                <h3>Gecategoriseerd</h3>
-                <div class="number" id="categorized-questions">304</div>
-                <div class="percentage">63.5%</div>
-            </div>
-        </section>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">📊 Overzicht</button>
+            <button class="tab" onclick="switchTab('export')">📥 Selectie & Export</button>
+        </div>
         
-        <section class="search-section">
-            <h2>🔍 Zoek en Filter Vragen</h2>
-            <div class="search-controls">
-                <input type="text" id="search-input" class="search-input" placeholder="Zoek in vragen...">
-                <select id="domain-filter" class="filter-select">
-                    <option value="">Alle Domeinen</option>
-                    <option value="Waarnemen">Waarnemen (112)</option>
-                    <option value="Erfelijkheid">Erfelijkheid (44)</option>
-                    <option value="Bloedsomloop">Bloedsomloop (36)</option>
-                    <option value="Voeding en vertering">Voeding en vertering (24)</option>
-                    <option value="Uitscheiding">Uitscheiding (19)</option>
-                    <option value="Afweer">Afweer (18)</option>
-                    <option value="Stofwisseling van de cel">Stofwisseling van de cel (18)</option>
-                    <option value="Zenuwstelsel en hormonen">Zenuwstelsel en hormonen (14)</option>
-                    <option value="Plantenfysiologie">Plantenfysiologie (8)</option>
-                    <option value="Ademhaling">Ademhaling (6)</option>
-                    <option value="Ecologie">Ecologie (3)</option>
-                    <option value="Beweging">Beweging (2)</option>
-                    <option value="Onbekend">Onbekend (175)</option>
-                </select>
-                <select id="pdf-filter" class="filter-select">
-                    <option value="">Alle Examens</option>
-                    <option value="2025I.pdf">2025 Tijdvak 1</option>
-                    <option value="2025I bijlage.pdf">2025 Tijdvak 1 Bijlage</option>
-                    <option value="2025II.pdf">2025 Tijdvak 2</option>
-                </select>
-            </div>
-            <div class="results-count" id="results-count"></div>
-        </section>
+        <!-- OVERVIEW TAB -->
+        <div id="overview-tab" class="tab-content active">
+            <section class="stats-overview">
+                <div class="stat-card">
+                    <h3>Totaal Vragen</h3>
+                    <div class="number" id="total-questions">209</div>
+                    <div class="percentage">100%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Domeinen</h3>
+                    <div class="number" id="total-domains">13</div>
+                    <div class="percentage">actief</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Gecategoriseerd</h3>
+                    <div class="number" id="categorized-questions">208</div>
+                    <div class="percentage">99.5%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Onbekend</h3>
+                    <div class="number">1</div>
+                    <div class="percentage">0.5%</div>
+                </div>
+            </section>
+            
+            <section class="search-section">
+                <h2>🔍 Zoek en Filter Vragen</h2>
+                <div class="search-controls">
+                    <input type="text" id="search-input" class="search-input" placeholder="Zoek in vragen...">
+                    <select id="domain-filter" class="filter-select">
+                        <option value="">Alle Domeinen</option>
+                        <option value="Ademhaling">Ademhaling (6)</option>
+                        <option value="Afweer">Afweer (18)</option>
+                        <option value="Beweging">Beweging (2)</option>
+                        <option value="Bloedsomloop">Bloedsomloop (37)</option>
+                        <option value="Ecologie">Ecologie (3)</option>
+                        <option value="Erfelijkheid">Erfelijkheid (40)</option>
+                        <option value="Onbekend">Onbekend (1)</option>
+                        <option value="Plantenfysiologie">Plantenfysiologie (8)</option>
+                        <option value="Stofwisseling van de cel">Stofwisseling van de cel (15)</option>
+                        <option value="Uitscheiding">Uitscheiding (20)</option>
+                        <option value="Voeding en vertering">Voeding en vertering (24)</option>
+                        <option value="Waarnemen">Waarnemen (21)</option>
+                        <option value="Zenuwstelsel en hormonen">Zenuwstelsel en hormonen (14)</option>
+                    </select>
+                    <select id="pdf-filter" class="filter-select">
+                        <option value="">Alle Examens</option>
+                        <option value="2025I bijlage.pdf">2025I bijlage.pdf (2)</option>
+                        <option value="2025I.pdf">2025I.pdf (112)</option>
+                        <option value="2025II.pdf">2025II.pdf (95)</option>
+                    </select>
+                </div>
+                <div class="results-count" id="results-count"></div>
+            </section>
+            
+            <section id="domain-overview">
+                <h2 style="color: #2c3e50; margin-bottom: 20px;">📊 Domeinen Overzicht</h2>
+                <div class="domain-grid" id="domain-grid">
+                    <a href="#Erfelijkheid" class="domain-link">
+                        <h4>Erfelijkheid</h4>
+                        <div class="count">40 vragen (19.1%)</div>
+                    </a>
+                    <a href="#Bloedsomloop" class="domain-link">
+                        <h4>Bloedsomloop</h4>
+                        <div class="count">37 vragen (17.7%)</div>
+                    </a>
+                    <a href="#Voeding en vertering" class="domain-link">
+                        <h4>Voeding en vertering</h4>
+                        <div class="count">24 vragen (11.5%)</div>
+                    </a>
+                    <a href="#Waarnemen" class="domain-link">
+                        <h4>Waarnemen</h4>
+                        <div class="count">21 vragen (10.0%)</div>
+                    </a>
+                    <a href="#Uitscheiding" class="domain-link">
+                        <h4>Uitscheiding</h4>
+                        <div class="count">20 vragen (9.6%)</div>
+                    </a>
+                    <a href="#Afweer" class="domain-link">
+                        <h4>Afweer</h4>
+                        <div class="count">18 vragen (8.6%)</div>
+                    </a>
+                    <a href="#Stofwisseling van de cel" class="domain-link">
+                        <h4>Stofwisseling van de cel</h4>
+                        <div class="count">15 vragen (7.2%)</div>
+                    </a>
+                    <a href="#Zenuwstelsel en hormonen" class="domain-link">
+                        <h4>Zenuwstelsel en hormonen</h4>
+                        <div class="count">14 vragen (6.7%)</div>
+                    </a>
+                    <a href="#Plantenfysiologie" class="domain-link">
+                        <h4>Plantenfysiologie</h4>
+                        <div class="count">8 vragen (3.8%)</div>
+                    </a>
+                    <a href="#Ademhaling" class="domain-link">
+                        <h4>Ademhaling</h4>
+                        <div class="count">6 vragen (2.9%)</div>
+                    </a>
+                    <a href="#Ecologie" class="domain-link">
+                        <h4>Ecologie</h4>
+                        <div class="count">3 vragen (1.4%)</div>
+                    </a>
+                    <a href="#Beweging" class="domain-link">
+                        <h4>Beweging</h4>
+                        <div class="count">2 vragen (1.0%)</div>
+                    </a>
+                    <a href="#Onbekend" class="domain-link">
+                        <h4>Onbekend</h4>
+                        <div class="count">1 vragen (0.5%)</div>
+                    </a>
+                </div>
+            </section>
+            
+            <section id="questions-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </section>
+        </div>
         
-        <section id="domain-overview">
-            <h2 style="color: #2c3e50; margin-bottom: 20px;">📊 Domeinen Overzicht</h2>
-            <div class="domain-grid" id="domain-grid">
-                <a href="#Waarnemen" class="domain-link">
-                    <h4>Waarnemen</h4>
-                    <div class="count">112 vragen (23.4%)</div>
-                </a>
-                <a href="#Erfelijkheid" class="domain-link">
-                    <h4>Erfelijkheid</h4>
-                    <div class="count">44 vragen (9.2%)</div>
-                </a>
-                <a href="#Bloedsomloop" class="domain-link">
-                    <h4>Bloedsomloop</h4>
-                    <div class="count">36 vragen (7.5%)</div>
-                </a>
-                <a href="#Voeding en vertering" class="domain-link">
-                    <h4>Voeding en vertering</h4>
-                    <div class="count">24 vragen (5.0%)</div>
-                </a>
-                <a href="#Uitscheiding" class="domain-link">
-                    <h4>Uitscheiding</h4>
-                    <div class="count">19 vragen (4.0%)</div>
-                </a>
-                <a href="#Afweer" class="domain-link">
-                    <h4>Afweer</h4>
-                    <div class="count">18 vragen (3.8%)</div>
-                </a>
-                <a href="#Stofwisseling van de cel" class="domain-link">
-                    <h4>Stofwisseling van de cel</h4>
-                    <div class="count">18 vragen (3.8%)</div>
-                </a>
-                <a href="#Zenuwstelsel en hormonen" class="domain-link">
-                    <h4>Zenuwstelsel en hormonen</h4>
-                    <div class="count">14 vragen (2.9%)</div>
-                </a>
-                <a href="#Plantenfysiologie" class="domain-link">
-                    <h4>Plantenfysiologie</h4>
-                    <div class="count">8 vragen (1.7%)</div>
-                </a>
-                <a href="#Ademhaling" class="domain-link">
-                    <h4>Ademhaling</h4>
-                    <div class="count">6 vragen (1.3%)</div>
-                </a>
-                <a href="#Ecologie" class="domain-link">
-                    <h4>Ecologie</h4>
-                    <div class="count">3 vragen (0.6%)</div>
-                </a>
-                <a href="#Beweging" class="domain-link">
-                    <h4>Beweging</h4>
-                    <div class="count">2 vragen (0.4%)</div>
-                </a>
-                <a href="#Onbekend" class="domain-link">
-                    <h4>Onbekend</h4>
-                    <div class="count">175 vragen (36.5%)</div>
-                </a>
-            </div>
-        </section>
-        
-        <section id="questions-container">
-            <!-- Questions will be inserted here by JavaScript -->
-        </section>
+        <!-- EXPORT TAB -->
+        <div id="export-tab" class="tab-content">
+            <section class="export-section">
+                <h2>📥 Selecteer en Exporteer Vragen per Domein</h2>
+                <p style="color: #7f8c8d; margin-bottom: 20px;">
+                    Selecteer hier welke domeinen je wilt exporteren. Je kunt de vragen ook filteren en individueel selecteren.
+                </p>
+                
+                <div class="export-controls">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="select-all-domains" onchange="toggleAllDomains()">
+                        <label for="select-all-domains"><strong>Selecteer alle domeinen</strong></label>
+                    </div>
+                    <button class="btn btn-secondary" onclick="clearSelection()">🗑️ Wis selectie</button>
+                    <button class="btn btn-success" onclick="exportSelected()">📥 Exporteer geselecteerde</button>
+                </div>
+                
+                <div class="export-options">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include-pdf" checked>
+                        <label for="include-pdf">Inclusief examen bron</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include-domain" checked>
+                        <label for="include-domain">Inclusief domein</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="format-csv">
+                        <label for="format-csv">CSV formaat</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="format-json" checked>
+                        <label for="format-json">JSON formaat</label>
+                    </div>
+                </div>
+                
+                <div style="margin: 20px 0; color: #7f8c8d;">
+                    <span id="selected-count" class="selected-count">0 vragen geselecteerd</span>
+                </div>
+                
+                <h3 style="color: #2c3e50; margin: 25px 0 15px 0;">📋 Selecteer domeinen:</h3>
+                <div class="domain-grid" id="export-domain-grid">
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Erfelijkheid\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Erfelijkheid" class="domain-checkbox" data-domain="Erfelijkheid" onchange="updateDomainSelection()">
+                            <label for="domain-Erfelijkheid"><strong>Erfelijkheid</strong></label>
+                        </div>
+                        <div class="count">40 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Bloedsomloop\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Bloedsomloop" class="domain-checkbox" data-domain="Bloedsomloop" onchange="updateDomainSelection()">
+                            <label for="domain-Bloedsomloop"><strong>Bloedsomloop</strong></label>
+                        </div>
+                        <div class="count">37 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Voeding en vertering\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Voeding_en_vertering" class="domain-checkbox" data-domain="Voeding en vertering" onchange="updateDomainSelection()">
+                            <label for="domain-Voeding_en_vertering"><strong>Voeding en vertering</strong></label>
+                        </div>
+                        <div class="count">24 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Waarnemen\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Waarnemen" class="domain-checkbox" data-domain="Waarnemen" onchange="updateDomainSelection()">
+                            <label for="domain-Waarnemen"><strong>Waarnemen</strong></label>
+                        </div>
+                        <div class="count">21 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Uitscheiding\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Uitscheiding" class="domain-checkbox" data-domain="Uitscheiding" onchange="updateDomainSelection()">
+                            <label for="domain-Uitscheiding"><strong>Uitscheiding</strong></label>
+                        </div>
+                        <div class="count">20 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Afweer\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Afweer" class="domain-checkbox" data-domain="Afweer" onchange="updateDomainSelection()">
+                            <label for="domain-Afweer"><strong>Afweer</strong></label>
+                        </div>
+                        <div class="count">18 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Stofwisseling van de cel\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Stofwisseling_van_de_cel" class="domain-checkbox" data-domain="Stofwisseling van de cel" onchange="updateDomainSelection()">
+                            <label for="domain-Stofwisseling_van_de_cel"><strong>Stofwisseling van de cel</strong></label>
+                        </div>
+                        <div class="count">15 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Zenuwstelsel en hormonen\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Zenuwstelsel_en_hormonen" class="domain-checkbox" data-domain="Zenuwstelsel en hormonen" onchange="updateDomainSelection()">
+                            <label for="domain-Zenuwstelsel_en_hormonen"><strong>Zenuwstelsel en hormonen</strong></label>
+                        </div>
+                        <div class="count">14 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Plantenfysiologie\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Plantenfysiologie" class="domain-checkbox" data-domain="Plantenfysiologie" onchange="updateDomainSelection()">
+                            <label for="domain-Plantenfysiologie"><strong>Plantenfysiologie</strong></label>
+                        </div>
+                        <div class="count">8 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Ademhaling\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Ademhaling" class="domain-checkbox" data-domain="Ademhaling" onchange="updateDomainSelection()">
+                            <label for="domain-Ademhaling"><strong>Ademhaling</strong></label>
+                        </div>
+                        <div class="count">6 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Ecologie\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Ecologie" class="domain-checkbox" data-domain="Ecologie" onchange="updateDomainSelection()">
+                            <label for="domain-Ecologie"><strong>Ecologie</strong></label>
+                        </div>
+                        <div class="count">3 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Beweging\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Beweging" class="domain-checkbox" data-domain="Beweging" onchange="updateDomainSelection()">
+                            <label for="domain-Beweging"><strong>Beweging</strong></label>
+                        </div>
+                        <div class="count">2 vragen</div>
+                    </div>
+                    <div class="domain-link" style="cursor: pointer;" onclick="toggleDomain(\"Onbekend\")">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="domain-Onbekend" class="domain-checkbox" data-domain="Onbekend" onchange="updateDomainSelection()">
+                            <label for="domain-Onbekend"><strong>Onbekend</strong></label>
+                        </div>
+                        <div class="count">1 vragen</div>
+                    </div>
+                </div>
+                
+                <h3 style="color: #2c3e50; margin: 25px 0 15px 0;">🔍 Gefilterde vragen:</h3>
+                <div id="export-questions-container">
+                    <!-- Questions will be inserted here -->
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- Modal for export -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">📥 Export Resultaat</h2>
+            <p style="color: #7f8c8d; margin-bottom: 15px;">Kopieer de onderstaande data:</p>
+            <textarea id="exportText" class="export-text" readonly></textarea>
+            <button class="btn btn-success" onclick="copyToClipboard()">📋 Kopieer naar klembord</button>
+            <button class="btn btn-secondary" onclick="closeModal()" style="margin-left: 10px;">Sluiten</button>
+        </div>
     </div>
     
     <script>
@@ -456,3 +802,429 @@
             {pdf: "2025I.pdf", domain: "Afweer", question: "Uit dit onderzoek is niet af te leiden of een grotere milt erfelijk is of dat"},
             {pdf: "2025I.pdf", domain: "Afweer", question: "Om dat te bepalen moet in een vervolgonderzoek de miltgrootte van twee andere groepen met elkaar vergeleken worden"},
             {pdf: "2025I.pdf", domain: "Afweer", question: "Noteer twee groepen waarvan de milt grootte met elkaar moet worden vergeleken om hier duidelijkheid over te krijgen"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "erzoek waaruit blijkt dat een grotere milt erfelijk is"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "Beschrijf hoe evolutie tot een grotere milt kan hebben geleid"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "honden is bekend dat er een relatie is tussen de grootte van de milt en de maximale duik tijd"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "stoftekort kan de milt samentrekken om extra rode bloedcellen vrij te laten"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "capaciteit van de Bajau ook een relatie heeft met de grootte van hun milt en of deze aanpassing een genetische basis heeft"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "Met behulp van echografie bepaald en ze de grootte van de milt"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "Cellen van de milt zijn moeilijk af te nemen"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "De milt is onderdeel van het lymfestelsel"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "Met echografie werd de grootte van de milt bepaald"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "De transducer van het echoapparaat wordt op de plaats op de romp gezet waar zich de milt bevindt"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "Op een beeldscherm kan de milt dan zichtbaar worden gemaakt"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "st worden om een beeld van de milt te kunnen krijgen"},
+            {pdf: "2025I.pdf", domain: "Afweer", question: "e infectie gehad met een schimmel die resistent is tegen medicijnen"},
+            {pdf: "2025I.pdf", domain: "Stofwisseling van de cel", question: "Artsen vermoeden dat patiënten de ziekte oplopen door het inademen van resistente schimmelsporen uit het milieu"},
+            {pdf: "2025I.pdf", domain: "Stofwisseling van de cel", question: "In de periode van mei tot oktober groeit de populatie Als het wateroppervlak geheel met eendenkroos bedekt is kan een tekort aan zuurstof ontstaan"},
+            {pdf: "2025I.pdf", domain: "Stofwisseling van de cel", question: "Noteer de nummers van de vier gebeurtenissen waardoor een tekort aan zuurstof ontstaat in de juiste volgorde"},
+            {pdf: "2025I.pdf", domain: "Stofwisseling van de cel", question: "Er is geen fotosynthese mogelijk bij waterplanten die onder water groeien"},
+            {pdf: "2025I.pdf", domain: "Stofwisseling van de cel", question: "es spelen een aantal gebeurtenissen een rol Aerobe bacteriën breken het organisch materiaal af"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Welk enzym is nodig voor de afbraak van zetmeel"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "De schimmel in de longen en hersenen van Jasper bleek resistent tegen azolen door een puntmutatie in het gen voor het enzym"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Daardoor heeft het enzym een iets andere vorm met als gevolg dat azolen dit enzym niet meer kunnen remmen"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Ondanks de andere vorm is het enzym nog wel werkzaam"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "he stoffen organische stoffen reducenten organische stoffen anorganische stoffen scheidt amylase uit"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "enzym is nodig voor"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "ntlasting terechtkomt Er is nog een belangrijke oorzaak van dit energieverlies"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Noteer die oorzaak"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Door het hoge eiwitgehalte"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "De bloedmonsters werden onderzocht op het gehalte aan essentiële aminozuren"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "Leg uit dat voor het bepalen"},
+            {pdf: "2025I.pdf", domain: "Voeding en vertering", question: "van de vertering van eiwitten"},
+            {pdf: "2025I.pdf", domain: "Uitscheiding", question: "Noteer welk onderzoek werd gedaan aan het huidmonster om het geslacht van de zeearend te bepalen"},
+            {pdf: "2025I.pdf", domain: "Uitscheiding", question: "Welk gedeelte van een niereenheid zal zijn aangetast waardoor een kaliumtekort kan optreden"},
+            {pdf: "2025I.pdf", domain: "Uitscheiding", question: "Maar door de hoge dosering van de medicijnen liepen Jaspers nieren schade op"},
+            {pdf: "2025I.pdf", domain: "Uitscheiding", question: "oor hun profielwerkstuk onderzoeken of de smaakstoffen van ham en van kaas elkaar op dezelfde manier versterken als spek"},
+            {pdf: "2025I.pdf", domain: "Uitscheiding", question: "Om te controleren of de proefpersonen wel in staat zijn om ham en kaassmaak waar te nemen lat en Han en Kees hun proefperso"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "Wetenschappers denken dat het samentrekken van de milt aan het begin van een duik wordt veroorzaakt door signalen van het zenuwstelsel"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "Welk deel van het zenuwstelsel is dat"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "In welk deel van de hersenen wordt de smaak waargenomen"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "lijk wordt waargenomen in de hersenen"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "el sel het parasympathisch zenuwstelsel het orthosympathisch zenuwstelsel lees verder Als er jonge zeearenden uit het ei"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "De ademprikkel blijft uit omdat de CO2 concentratie in het bloed hoog is"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "Demper prikkel blijft uit omdat de CO concentratie in het bloe d hoog is"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "erecht Dit leidt tot het ontstaan van in de zenuwc"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "Op twee plaatsen ontbreekt een woord"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "Noteer in de cirkels een voor een stimulerend effect en voor een remmend effect"},
+            {pdf: "2025I.pdf", domain: "Zenuwstelsel en hormonen", question: "De zenuwcellen in de neus reageren op geurstoffen"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "bladgroenkorrels celkern Welke van deze onderdelen zijn aanwezig bij een schimmelcel"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "De plantjes bestaan uit een bladachtig schijfje dat op het water drijft"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "Eendenkroos groeit op ondiep stilst aand of langzaam stromend water in sloten en vijvers"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "lees verder Eendenkroos groeit op ondiep stilst aand of langzaam stromend water in sloten en vijvers"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "Deze azolen komen met plantenafval terecht op composthopen"},
+            {pdf: "2025I.pdf", domain: "Plantenfysiologie", question: "Waar zullen de getransplanteerde"},
+            {pdf: "2025I.pdf", domain: "Ademhaling", question: "Om lang zijn adem in te kunnen houden kan een duiker vooraf een aantal keer diep in en uitademen"},
+            {pdf: "2025I.pdf", domain: "Ademhaling", question: "Door het inhouden van de adem wordt het restvolume van de longen groter"},
+            {pdf: "2025I.pdf", domain: "Ecologie", question: "De populatie is gegroeid tot ruim dieren"},
+            {pdf: "2025I.pdf", domain: "Ecologie", question: "ecosysteem populatie trofisch niveau De zeearend is in Nederland geen exoot"},
+            {pdf: "2025I.pdf", domain: "Beweging", question: "Methode onderzoekers meten de breedte en dikte van een bepaald bot in de poot"},
+            {pdf: "2025I bijlage.pdf", domain: "Bloedsomloop", question: "nummer in afbeeldin mptoom bi tekort rode bloedcel witte bloedcel wel smaakwaarnemin een smaakwaarne"},
+            {pdf: "2025I bijlage.pdf", domain: "Onbekend", question: "Naam kandidaat"},
+            {pdf: "2025II.pdf", domain: "Ademhaling", question: "lees verder De ademhaling wordt automatisch geregeld door het adem centrum"},
+            {pdf: "2025II.pdf", domain: "Ademhaling", question: "Zijn huisarts vermoedt het post covidsyndroom long covid"},
+            {pdf: "2025II.pdf", domain: "Ademhaling", question: "Als er minder longblaasjes zijn wordt een andere factor uit de formule kleiner"},
+            {pdf: "2025II.pdf", domain: "Ademhaling", question: "ctor is kleiner al s er minder longblaas"},
+            {pdf: "2025II.pdf", domain: "Afweer", question: "virus aanwezig zijn"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "afbeelding Zonnedauw is een groep van vlees etende planten met groene bladeren en bladeren met kleverige druppels"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Ze heeft al twee hartoperaties gehad"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "De hartafwijking van Britt is al vroeg tijdens de embryonale ontwikkeling ontstaan"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "afbeelding In de tekst worden drie verschil len genoemd ten opzichte van een normaal gebouwd hart"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "De hartchirurg heeft toen de wand v"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "In afbeelding is een schematische tekening van het hart van Britt te zien"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "In afbeelding zijn de hartkleppen met nummers aangegeven"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Noteer de nummers van de hartkleppen die bij de rechterboezem horen"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "In afbeelding is een schematische tekening van de bloedsomloop te zien"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Noteer de letter van de bloedvaten waarin het zuurstofgehalte van het bloed het hoogst is"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Noteer de letter van de bloedvaten waarin het zuurstofgehalte van het bloed het laagst is"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "In afbeelding is een schematische tekening van de bloedsomloop van Britt te zien"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Noteer de letter van het bloedvat waarin het zuurstofgehalte van het bloed het hoogst is"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "Noteer de letter van het bloedvat waarin het zuurstofgehalte van het bloed het laagst is"},
+            {pdf: "2025II.pdf", domain: "Bloedsomloop", question: "De bloeddruk in de longslagader is hoger dan normaal"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Onderzoekers in Zweden deden onderzoe naar de invloed van stikstofverbindingen in de bodem op de igheid van zon nedauw"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze zijn onderverdeeld in verschillende geslacht en genera"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "In tegenstelling tot pulp is het sap lang houdbaar"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "ng is ze sneller moe dan haar leeftijdsgenoten"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "arth na s hebben dezelfde uiterst compl xe mutatie aan het EDN gen"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie zorgt ervoor dat de bloeddruk in de longslagader hoger is dan normaal"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is autosoom dominant"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is autosoom recessief"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is X chromosoom gebonden dominant"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is X chromosoom gebonden recessief"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is Y chromosoom gebonden"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is mitochondrieel"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is in het DNA van de chloroplasten"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is in het DNA van de mitochondriën"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is in het DNA van de kern"},
+            {pdf: "2025II.pdf", domain: "Erfelijkheid", question: "Deze mutatie is in het DNA van de celkern"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "lees verder Het nadeel van het gebruik van verse suikerbieten is"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "De productie van sap uit suikerbieten kost echter veel meer energie waardoor deze manier van ethanol productie"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Het nadeel van zo n operatie is"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "lees verder Ademtherapie bij long covid Jean heeft maanden nadat hij covid heeft gehad nog steeds last van kortademigheid"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Kortademigheid kan ontstaan als de diffusiesnelheid van zuurstof van de lucht in de longblaasjes naar het bloed verandert"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "De diffusiesnelheid in de longblaasjes kun je bepalen met de onderstaande formule"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Noteer de letter van de factor die kleiner wordt als er minder longblaasjes zijn"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Noteer de letter van de factor die groter wordt als de wand van de longblaasjes dunner wordt"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Noteer de letter van de factor die kleiner wordt als de wand van de longblaasjes dunner wordt"},
+            {pdf: "2025II.pdf", domain: "Stofwisseling van de cel", question: "Noteer de letter van de factor die groter wordt als de diffusieafstand kleiner wordt"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "lees verder Bij een kat met chronisch nierfalen zijn"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "n te zien in een microscopisch preparaat van het nierweefsel"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "is een foto van een microscopisch preparaat van nierweefsel van een kat met chronisch nierfalen"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "kt van de niereenheid waar P en Q bij horen"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Hieronder staat hoe de grote hoeveelheid ureum ontstaat"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de nummers van de vier processen in de juiste volgorde"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "In afbeelding is een schematische tekening van het kapsel van Bowman met de glomerulus"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Welke letter in afbeelding geeft het kapsel van Bowman aan"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "En op welke plaats in afbeelding is de doorsnede gemaakt van de niereenheid waar P en Q bij horen"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de letter van de niereenheid waar P en Q bij horen"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "In afbeelding is een schematische tekening van een niereenheid te zien"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de letter van de niereenheid waar de glomerulus bij hoort"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de letter van de niereenheid waar de capsule van Bowman bij hoort"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de letter van de niereenheid waar de proximale tubulus bij hoort"},
+            {pdf: "2025II.pdf", domain: "Uitscheiding", question: "Noteer de letter van de niereenheid waar de lis van Henle bij hoort"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "kapsel van Bowman plaats doorsnede letter P plaats letter P plaats letter Q plaats letter Q plaats Maureen geeft Rio voed"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Het eten van te veel eiwitten zou name lijk leiden tot de productie van veel ureum wat schadelijk is voor Rio"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Bij de vertering van de grote hoeveelhei"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "eiwitten worden veel"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "gevormd die daarna worden geresorbeerd in de darm"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het enzym dat eiwitten afbreekt"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het enzym dat koolhydraten afbreekt"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het enzym dat vetten afbreekt"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het orgaan waar de vertering van eiwitten begint"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het orgaan waar de vertering van koolhydraten begint"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het orgaan waar de vertering van vetten begint"},
+            {pdf: "2025II.pdf", domain: "Voeding en vertering", question: "Noteer de naam van het orgaan waar de opname van voedingsstoffen plaatsvindt"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "En op welke plaats in afbeelding is de doorsnede gemaa"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Een groot gedeelte hiervan wordt vervolgens afgebroken door de"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Noteer het woord dat op de bijbehorende plaats moet staan erachter"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "e correctievoorschrift"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Kleine zonnedauw Drosera intermedia afbeelding is een plantje dat maximaal cm hoog wordt"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De bladeren van kleine zonnedauw zijn bedekt met tentakels"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Aan het uiteinde van de tentakels zitten druppels kleverige vloeistof"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Als een insect op een tentakel landt blijft het insect plakken"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De tentakels buigen zich dan naar het midden van het blad"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De druppels kleverige vloeistof van de tentakels aan de rand van het blad buigen zich ook naar het midden"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "Het insect wordt hierdoor omhuld door een laagje vloeistof"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De vertering van het insect begint"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De voedingsstoffen worden opgenomen door het blad"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De plant groeit hierdoor beter"},
+            {pdf: "2025II.pdf", domain: "Waarnemen", question: "De verspreiding van het pigment in de stervormige cellen wordt aangestuurd door het zenuwstelsel"},
+            {pdf: "2025II.pdf", domain: "Zenuwstelsel en hormonen", question: "De verspreiding van het pigment in de stervormige cellen wordt aangestuurd door het zenuwstelsel"},
+            {pdf: "2025II.pdf", domain: "Zenuwstelsel en hormonen", question: "Noteer een voordeel van aansturing door het zenuwstelsel"},
+            {pdf: "2025II.pdf", domain: "Zenuwstelsel en hormonen", question: "De afbeelding hieronder is een lengtedoorsnede van de hersenen en een deel van het ruggenmerg"},
+            {pdf: "2025II.pdf", domain: "Plantenfysiologie", question: "ers hebben er vier jaar lang in september en in juni het aantal plantjes zonnedauw per vierkante meter geteld"},
+            {pdf: "2025II.pdf", domain: "Plantenfysiologie", question: "Er is verband tussen de toegediende hoeveelheid stikstof en het aantal plantjes van ronde zonnedauw"},
+            {pdf: "2025II.pdf", domain: "Ecologie", question: "Verklaar aan de hand van een abiotische factor dat de"},
+            {pdf: "2025II.pdf", domain: "Beweging", question: "Ook hun botten en spieren zijn zwaar"},
+        ];
+        
+        // State
+        let selectedQuestions = new Set();
+        let selectedDomains = new Set();
+        let currentFilter = { search: '', domain: '', pdf: '' };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {{
+            renderQuestions();
+            updateStats();
+            
+            // Search and filter
+            document.getElementById('search-input').addEventListener('input', function(e) {{
+                currentFilter.search = e.target.value.toLowerCase();
+                renderQuestions();
+            }});
+            
+            document.getElementById('domain-filter').addEventListener('change', function(e) {{
+                currentFilter.domain = e.target.value;
+                renderQuestions();
+            }});
+            
+            document.getElementById('pdf-filter').addEventListener('change', function(e) {{
+                currentFilter.pdf = e.target.value;
+                renderQuestions();
+            }});
+        }});
+        
+        function switchTab(tabName) {{
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {{
+                tab.classList.remove('active');
+            }});
+            document.querySelectorAll('.tab').forEach(tab => {{
+                tab.classList.remove('active');
+            }});
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Render export questions if switching to export tab
+            if (tabName === 'export') {{
+                renderExportQuestions();
+            }}
+        }}
+        
+        function renderQuestions() {{
+            const container = document.getElementById('questions-container');
+            const filtered = questionsData.filter(q => {{
+                const matchesSearch = !currentFilter.search || q.question.toLowerCase().includes(currentFilter.search);
+                const matchesDomain = !currentFilter.domain || q.domain === currentFilter.domain;
+                const matchesPdf = !currentFilter.pdf || q.pdf === currentFilter.pdf;
+                return matchesSearch && matchesDomain && matchesPdf;
+            }});
+            
+            // Group by domain
+            const grouped = {};
+            filtered.forEach(q => {{
+                if (!grouped[q.domain]) grouped[q.domain] = [];
+                grouped[q.domain].push(q);
+            }});
+            
+            let html = '';
+            for (const [domain, qs] of Object.entries(grouped)) {{
+                html += `<section class="domain-section" id="${domain}">`;
+                html += `<div class="domain-header">`;
+                html += `<h3>${domain}</h3>`;
+                html += `<span class="domain-badge">${qs.length} vragen</span>`;
+                html += `</div>`;
+                html += `<ul class="question-list">`;
+                qs.forEach((q, idx) => {{
+                    html += `<li class="question-item" onclick="toggleQuestionSelection(${questionsData.indexOf(q)})">`;
+                    html += `<strong>Vraag ${idx + 1}</strong>`;
+                    html += `<div class="question-text">${q.question}</div>`;
+                    html += `<span class="pdf-tag">${q.pdf}</span>`;
+                    html += `</li>`;
+                }});
+                html += `</ul>`;
+                html += `</section>`;
+            }}
+            
+            if (filtered.length === 0) {{
+                html = '<div class="no-results">Geen vragen gevonden die voldoen aan de filtercriteria.</div>';
+            }}
+            
+            container.innerHTML = html;
+            document.getElementById('results-count').textContent = `Gevonden: ${filtered.length} vragen`;
+        }}
+        
+        function toggleQuestionSelection(index) {{
+            if (selectedQuestions.has(index)) {{
+                selectedQuestions.delete(index);
+            }} else {{
+                selectedQuestions.add(index);
+            }}
+            updateSelectedCount();
+            renderQuestions(); // Re-render to show selection
+        }}
+        
+        function updateSelectedCount() {{
+            document.getElementById('selected-count').textContent = `${selectedQuestions.size} vragen geselecteerd`;
+        }}
+        
+        function toggleDomain(domain) {{
+            const checkbox = document.querySelector(`input[data-domain="${domain}"]`);
+            checkbox.checked = !checkbox.checked;
+            updateDomainSelection();
+        }}
+        
+        function updateDomainSelection() {{
+            selectedDomains.clear();
+            document.querySelectorAll('.domain-checkbox:checked').forEach(cb => {{
+                selectedDomains.add(cb.dataset.domain);
+            }});
+            renderExportQuestions();
+        }}
+        
+        function toggleAllDomains() {{
+            const checked = document.getElementById('select-all-domains').checked;
+            document.querySelectorAll('.domain-checkbox').forEach(cb => {{
+                cb.checked = checked;
+            }});
+            updateDomainSelection();
+        }}
+        
+        function clearSelection() {{
+            selectedQuestions.clear();
+            document.getElementById('select-all-domains').checked = false;
+            document.querySelectorAll('.domain-checkbox').forEach(cb => {{
+                cb.checked = false;
+            }});
+            selectedDomains.clear();
+            updateSelectedCount();
+            renderExportQuestions();
+            renderQuestions();
+        }}
+        
+        function renderExportQuestions() {{
+            const container = document.getElementById('export-questions-container');
+            
+            // Get questions from selected domains
+            let filtered = questionsData.filter(q => selectedDomains.has(q.domain));
+            
+            // Apply search filter if any
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            if (searchText) {{
+                filtered = filtered.filter(q => q.question.toLowerCase().includes(searchText));
+            }}
+            
+            let html = '';
+            
+            // Group by domain
+            const grouped = {};
+            filtered.forEach(q => {{
+                if (!grouped[q.domain]) grouped[q.domain] = [];
+                grouped[q.domain].push(q);
+            }});
+            
+            for (const [domain, qs] of Object.entries(grouped)) {{
+                html += `<section class="domain-section">`;
+                html += `<div class="domain-header">`;
+                html += `<h3>${domain}</h3>`;
+                html += `<span class="domain-badge">${qs.length} vragen</span>`;
+                html += `</div>`;
+                html += `<ul class="question-list">`;
+                qs.forEach((q, idx) => {{
+                    const qIndex = questionsData.indexOf(q);
+                    const isSelected = selectedQuestions.has(qIndex);
+                    html += `<li class="question-item ${isSelected ? 'selected' : ''}" onclick="toggleQuestionSelection(${qIndex})">`;
+                    html += `<strong>Vraag ${idx + 1}</strong>`;
+                    html += `<div class="question-text">${q.question}</div>`;
+                    html += `<span class="pdf-tag">${q.pdf}</span>`;
+                    html += `</li>`;
+                }});
+                html += `</ul>`;
+                html += `</section>`;
+            }}
+            
+            if (filtered.length === 0) {{
+                html = '<div class="no-results">Selecteer tenminste één domein om vragen te zien.</div>';
+            }}
+            
+            container.innerHTML = html;
+        }}
+        
+        function exportSelected() {{
+            const includePdf = document.getElementById('include-pdf').checked;
+            const includeDomain = document.getElementById('include-domain').checked;
+            const formatCsv = document.getElementById('format-csv').checked;
+            const formatJson = document.getElementById('format-json').checked;
+            
+            // Get selected questions
+            let selected = [];
+            
+            if (selectedQuestions.size > 0) {{
+                // Use individually selected questions
+                selected = Array.from(selectedQuestions).map(idx => questionsData[idx]);
+            }} else {{
+                // Use all questions from selected domains
+                selected = questionsData.filter(q => selectedDomains.has(q.domain));
+            }}
+            
+            if (selected.length === 0) {{
+                alert('Selecteer tenminste één domein of vraag om te exporteren.');
+                return;
+            }}
+            
+            let output = '';
+            
+            if (formatCsv) {{
+                // CSV format
+                const headers = [];
+                if (includePdf) headers.push('Examen');
+                if (includeDomain) headers.push('Domein');
+                headers.push('Vraag');
+                
+                output += headers.join(',') + '\n';
+                
+                selected.forEach(q => {{
+                    const fields = [];
+                    if (includePdf) fields.push(`"${q.pdf}"`);
+                    if (includeDomain) fields.push(`"${q.domain}"`);
+                    fields.push(`"${q.question.replace(/"/g, '""')}"`);
+                    output += fields.join(',') + '\n';
+                }});
+                output += '\n';
+            }}
+            
+            if (formatJson) {{
+                if (output) output += '\n';
+                const jsonData = selected.map(q => {{
+                    const obj = {};
+                    if (includePdf) obj.Examen = q.pdf;
+                    if (includeDomain) obj.Domein = q.domain;
+                    obj.Vraag = q.question;
+                    return obj;
+                }});
+                output += JSON.stringify(jsonData, null, 2);
+            }}
+            
+            // Show in modal
+            document.getElementById('exportText').value = output;
+            document.getElementById('exportModal').style.display = 'block';
+        }}
+        
+        function copyToClipboard() {{
+            const textarea = document.getElementById('exportText');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Data gekopieerd naar klembord!');
+        }}
+        
+        function closeModal() {{
+            document.getElementById('exportModal').style.display = 'none';
+        }}
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {{
+            const modal = document.getElementById('exportModal');
+            if (event.target == modal) {{
+                modal.style.display = 'none';
+            }}
+        }}
+        
+        function updateStats() {{
+            // Already set in HTML
+        }}
+    </script>
+</body>
+</html>
